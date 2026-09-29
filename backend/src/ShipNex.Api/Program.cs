@@ -241,6 +241,37 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+// ---------- Apply EF Core migrations (PostgreSQL only) ----------
+// The schema is created from the migrations in ShipNex.Infrastructure/Migrations.
+// Previously nothing ever created the schema, so the API started and then failed
+// on every query with 42P01. This runs before any request is served.
+//
+// Guarded three ways:
+//   1. Only for a relational provider — the InMemory provider has no schema to
+//      migrate and does not support Migrate().
+//   2. Skipped in Development, where InMemory seeding owns the data.
+//   3. Opt-out via Database:MigrateOnStartup=false, so a deployment that applies
+//      migrations in a release step (dotnet ef database update) stays in control.
+if (dbProvider.Equals("PostgreSQL", StringComparison.OrdinalIgnoreCase) &&
+    !string.Equals(app.Configuration["Database:MigrateOnStartup"], "false", StringComparison.OrdinalIgnoreCase))
+{
+    try
+    {
+        using var scope = app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<ShipNexDbContext>();
+        db.Database.Migrate();
+        Log.Information("EF Core migrations applied.");
+    }
+    catch (Exception ex)
+    {
+        // Fail loudly: starting without a schema only defers the crash to the
+        // first request. The readiness probe would otherwise report a database
+        // that is reachable but has no tables.
+        Log.Fatal(ex, "Failed to apply EF Core migrations. The API will not start.");
+        throw;
+    }
+}
+
 // ---------- Seed (development In-Memory database only) ----------
 if (dbProvider.Equals("InMemory", StringComparison.OrdinalIgnoreCase) && app.Environment.IsDevelopment())
 {

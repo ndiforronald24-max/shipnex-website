@@ -1,7 +1,36 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using ShipNex.Domain.Entities;
 
 namespace ShipNex.Infrastructure.Data;
+
+/// <summary>
+/// Design-time factory used ONLY by the EF Core tooling (`dotnet ef`).
+///
+/// Without it, `dotnet ef` has to boot the whole API host, which fails (or hangs)
+/// because Program.cs demands a JWT secret, opens ports, and seeds data. This
+/// factory builds the DbContext directly, so scaffolding a migration never needs
+/// a running application, a real database, or any secrets.
+///
+/// The connection string is only used to pick the relational provider and
+/// generate provider-specific SQL; nothing is connected to while scaffolding.
+/// Runtime provider selection still happens in Program.cs.
+/// </summary>
+public class ShipNexDbContextFactory : IDesignTimeDbContextFactory<ShipNexDbContext>
+{
+    public ShipNexDbContext CreateDbContext(string[] args)
+    {
+        var connectionString =
+            Environment.GetEnvironmentVariable("Database__ConnectionString")
+            ?? "Host=localhost;Port=5432;Database=shipnex;Username=postgres;Password=postgres";
+
+        var options = new DbContextOptionsBuilder<ShipNexDbContext>()
+            .UseNpgsql(connectionString)
+            .Options;
+
+        return new ShipNexDbContext(options);
+    }
+}
 
 public class ShipNexDbContext : DbContext
 {
