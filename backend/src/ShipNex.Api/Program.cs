@@ -1,5 +1,8 @@
+using System.Net;
 using System.Text;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -10,6 +13,9 @@ using ShipNex.Api.Middleware;
 using ShipNex.Application.Interfaces;
 using ShipNex.Infrastructure.Data;
 using ShipNex.Infrastructure.Services;
+// .NET 8 introduced System.Net.IPNetwork, which collides with the ASP.NET Core
+// type used by ForwardedHeadersOptions. Alias the ASP.NET Core one explicitly.
+using AspNetCoreNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +51,36 @@ catch (Exception ex)
 // ---------- Services ----------
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddHealthChecks();
+
+// ---------- Forwarded headers (reverse proxy: nginx / docker) ----------
+// Behind a proxy every request otherwise appears to originate from the proxy's
+// own IP, which collapses the per-IP rate limiter into one shared bucket and
+// makes the audit log record the wrong client. Restricted to explicitly trusted
+// proxies/networks so a client cannot spoof X-Forwarded-For from the outside.
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.ForwardLimit = 1; // single proxy hop; prevents header chaining
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+
+    foreach (var entry in (builder.Configuration["Proxy:KnownProxies"] ?? "").Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+    {
+        if (IPAddress.TryParse(entry, out var ip)) options.KnownProxies.Add(ip);
+    }
+
+    foreach (var entry in (builder.Configuration["Proxy:KnownNetworks"] ?? "").Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+    {
+        if (AspNetCoreNetwork.TryParse(entry, out var network)) options.KnownNetworks.Add(network);
+    }
+});
+
+// ---------- Health checks ----------
+// The default /health probe only proves the process is alive. A readiness probe
+// must also prove the database is reachable, otherwise a container reports
+// healthy while Postgres is down and traffic is routed into a broken API.
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ShipNexDbContext>("database", tags: new[] { "ready" });
 
 // ---------- Database: PostgreSQL when configured, InMemory fallback ----------
 var dbProvider = builder.Configuration["Database:Provider"] ?? "InMemory";
@@ -213,6 +248,10 @@ if (dbProvider.Equals("InMemory", StringComparison.OrdinalIgnoreCase) && app.Env
 }
 
 // ---------- Middleware ----------
+// Forwarded headers must run FIRST so that everything downstream (rate limiter,
+// audit log, generated links) sees the real client IP and https scheme.
+app.UseForwardedHeaders();
+
 // Exception handling first to catch all errors
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
@@ -233,7 +272,22 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.MapHealthChecks("/health");
+
+// Liveness: the process is up. The predicate explicitly EXCLUDES the "ready" tag,
+// otherwise the default (run everything) would make liveness hit the database and
+// a transient DB outage would cause the orchestrator to kill an otherwise healthy
+// pod. Only the database probe is tagged "ready".
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    Predicate = check => !check.Tags.Contains("ready")
+});
+
+// Readiness: the process can actually serve traffic. Includes the database
+// probe, so a container is only marked ready when Postgres is reachable.
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
 
 // Serve static files from wwwroot (frontend)
 app.UseDefaultFiles();

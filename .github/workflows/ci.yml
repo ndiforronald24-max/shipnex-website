@@ -43,13 +43,13 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore dependencies
-        run: dotnet restore backend/src/ShipNex.Api/ShipNex.Api.csproj
+        run: dotnet restore backend/ShipNex.sln
 
       - name: Build backend
-        run: dotnet build backend/src/ShipNex.Api/ShipNex.Api.csproj --no-restore --configuration Release
+        run: dotnet build backend/ShipNex.sln --no-restore --configuration Release
 
       - name: Run tests
-        run: dotnet test backend/tests/ShipNex.Api.Tests/ShipNex.Api.Tests.csproj --no-build --verbosity normal --configuration Release
+        run: dotnet test backend/ShipNex.sln --verbosity normal --configuration Release
         env:
           Database__Provider: PostgreSQL
           Database__ConnectionString: Host=localhost;Port=5432;Database=shipnex_test;Username=postgres;Password=postgres
