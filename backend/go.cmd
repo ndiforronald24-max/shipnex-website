@@ -1,0 +1,1 @@
+dotnet run --urls "http://localhost:5000" --project src\ShipNex.Api

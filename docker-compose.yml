@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: shipnex-postgres
+    environment:
+      POSTGRES_DB: shipnex
+      POSTGRES_USER: shipnex
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-ShipNexSecurePassword123!}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shipnex"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - shipnex-network
+
+  # Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shipnex-backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - Database__Provider=PostgreSQL
+      - Database__ConnectionString=Host=postgres;Port=5432;Database=shipnex;Username=shipnex;Password=${DB_PASSWORD:-ShipNexSecurePassword123!}
+      - Jwt__SecretKey=${JWT_SECRET:-YourSuperSecretKeyForProduction2026!MakeItLongAndRandom}
+      - Jwt__Issuer=ShipNex
+      - Jwt__Audience=ShipNexApp
+      - Email__SmtpHost=${SMTP_HOST:-}
+      - Email__SmtpPort=${SMTP_PORT:-587}
+      - Email__Username=${SMTP_USERNAME:-}
+      - Email__Password=${SMTP_PASSWORD:-}
+      - Email__FromAddress=noreply@shipnex.com
+      - Email__FromName=ShipNex Logistics
+      - FileStorage__Provider=Local
+      - FileStorage__LocalPath=/app/uploads
+    ports:
+      - "5000:80"
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - shipnex-network
+
+  # Frontend (Nginx)
+  frontend:
+    image: nginx:alpine
+    container_name: shipnex-frontend
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./dist:/usr/share/nginx/html:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - shipnex-network
+
+volumes:
+  postgres_data:
+  uploads_data:
+
+networks:
+  shipnex-network:
+    driver: bridge

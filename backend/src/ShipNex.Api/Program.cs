@@ -1,0 +1,244 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Events;
+using ShipNex.Api;
+using ShipNex.Api.Middleware;
+using ShipNex.Application.Interfaces;
+using ShipNex.Infrastructure.Data;
+using ShipNex.Infrastructure.Services;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// ---------- Serilog ----------
+try
+{
+    Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+        .MinimumLevel.Override("System", LogEventLevel.Warning)
+        .Enrich.FromLogContext()
+        .Enrich.WithMachineName()
+        .Enrich.WithThreadId()
+        .WriteTo.Console(
+            outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+        .WriteTo.File(
+            path: "logs/shipnex-.log",
+            rollingInterval: RollingInterval.Day,
+            retainedFileCountLimit: 30)
+        .WriteTo.File(
+            path: "logs/shipnex-errors-.log",
+            rollingInterval: RollingInterval.Day,
+            retainedFileCountLimit: 90,
+            restrictedToMinimumLevel: LogEventLevel.Error)
+        .CreateLogger();
+
+    builder.Host.UseSerilog();
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Warning: Serilog initialization failed: {ex.Message}");
+}
+
+// ---------- Services ----------
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHealthChecks();
+
+// ---------- Database: PostgreSQL when configured, InMemory fallback ----------
+var dbProvider = builder.Configuration["Database:Provider"] ?? "InMemory";
+var connectionString = builder.Configuration["Database:ConnectionString"];
+
+builder.Services.AddDbContext<ShipNexDbContext>(options =>
+{
+    if (dbProvider.Equals("PostgreSQL", StringComparison.OrdinalIgnoreCase) &&
+        !string.IsNullOrWhiteSpace(connectionString))
+    {
+        options.UseNpgsql(connectionString);
+    }
+    else
+    {
+        options.UseInMemoryDatabase("ShipNexDb");
+    }
+});
+
+// ---------- JWT ----------
+var jwtSecret = builder.Configuration["Jwt:SecretKey"];
+if (string.IsNullOrWhiteSpace(jwtSecret) && builder.Environment.IsDevelopment())
+{
+    // Dev-only fallback so the API can start without local secrets. NEVER use in production.
+    jwtSecret = "Dev_Only_ShipNex_Secret_Key_Change_Me_0123456789_ABCDEFGH!";
+}
+if (string.IsNullOrWhiteSpace(jwtSecret))
+{
+    throw new InvalidOperationException(
+        "JWT SecretKey is not configured. Set the Jwt__SecretKey environment variable or the Jwt:SecretKey appsettings value.");
+}
+
+builder.Services.AddSingleton(new JwtService(builder.Configuration));
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "ShipNex",
+            ValidAudience = builder.Configuration["Jwt:Audience"] ?? "ShipNexApp",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+// ---------- Role-based authorization ----------
+builder.Services.AddAuthorization(options =>
+{
+    var roles = new[]
+    {
+        "SuperAdmin", "OperationsManager", "ShipmentStaff", "PetOperations",
+        "CustomerSupport", "Finance", "ReadOnly", "Customer"
+    };
+    foreach (var role in roles)
+    {
+        options.AddPolicy(role, policy => policy.RequireRole(role));
+    }
+    options.AddPolicy("StaffOnly", policy => policy.RequireRole(
+        "SuperAdmin", "OperationsManager", "ShipmentStaff", "PetOperations",
+        "CustomerSupport", "Finance"));
+});
+
+// ---------- Application services ----------
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IShipmentService, ShipmentService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IPetShipmentService, PetShipmentService>();
+builder.Services.AddScoped<ITrackingNumberGenerator, TrackingNumberGenerator>();
+builder.Services.AddScoped<IOfficeService, OfficeService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IAuditService, AuditService>();
+
+// ---------- Email & File Storage services ----------
+    // Register HttpClient for Resend provider (server-side only — API key never reaches client)
+    builder.Services.AddHttpClient<ResendEmailService>();
+
+    // Select email provider based on configuration — key lives only in server config
+    var emailProvider = builder.Configuration["Email:Provider"] ?? "Smtp";
+    if (emailProvider.Equals("Resend", StringComparison.OrdinalIgnoreCase))
+    {
+        builder.Services.AddScoped<IEmailService, ResendEmailService>();
+    }
+    else
+    {
+        builder.Services.AddScoped<IEmailService, SmtpEmailService>();
+    }
+    builder.Services.AddScoped<IEmailNotificationService, EmailNotificationService>();
+
+    // ---------- Supabase Realtime ----------
+    // Only enabled when Realtime:SupabaseUrl / Realtime:SupabaseAnonKey are configured.
+    // Falls back to local storage provider when not configured — tracking still works
+    // via normal refresh.
+    builder.Services.AddHttpClient<ISupabaseRealtimeService, SupabaseRealtimeService>();
+
+// Select file storage provider. Supabase Storage = private bucket with
+// server-minted signed URLs; Local = disk behind the authorized API.
+var fileStorageProvider = builder.Configuration["FileStorage:Provider"] ?? "Local";
+if (fileStorageProvider.Equals("Supabase", StringComparison.OrdinalIgnoreCase))
+{
+    builder.Services.AddHttpClient<IFileStorageService, SupabaseFileStorageService>();
+}
+else
+{
+    builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
+}
+
+// ---------- CORS ----------
+builder.Services.AddCors(options =>
+{
+    var configuredOrigins = builder.Configuration["Cors:AllowedOrigins"]
+        ?.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        ?? Array.Empty<string>();
+
+    // Local frontends used during development (vite dev/preview and the common
+    // alternate ports). These are always allowed in Development so that a
+    // configured production origin list (Cors:AllowedOrigins) can never lock the
+    // local UI out of the API. In Production only the explicitly configured
+    // origins are allowed.
+    var devOrigins = new[] { "http://localhost:5173", "http://localhost:3000", "http://localhost:4173" };
+    var origins = builder.Environment.IsDevelopment()
+        ? configuredOrigins.Concat(devOrigins).Distinct(StringComparer.OrdinalIgnoreCase).ToArray()
+        : configuredOrigins.Length > 0 ? configuredOrigins : devOrigins;
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins([.. origins])
+              .WithHeaders("Content-Type", "Authorization")
+              .WithMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+              .AllowCredentials();
+    });
+});
+
+// ---------- Swagger ----------
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ShipNex API", Version = "v1" });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header. Example: \"Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
+var app = builder.Build();
+
+// ---------- Seed (development In-Memory database only) ----------
+if (dbProvider.Equals("InMemory", StringComparison.OrdinalIgnoreCase) && app.Environment.IsDevelopment())
+{
+    ProgramSeeder.Seed(app);
+}
+
+// ---------- Middleware ----------
+// Exception handling first to catch all errors
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+// CORS must run before rate limiting, authentication and static files so browser
+// preflight (OPTIONS) requests always receive proper Access-Control-* headers and
+// never consume rate-limit budget or get answered by another middleware first.
+app.UseCors("AllowFrontend");
+
+// Rate limiting for auth endpoints
+app.UseMiddleware<RateLimitMiddleware>();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapControllers();
+app.MapHealthChecks("/health");
+
+// Serve static files from wwwroot (frontend)
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+app.Run();
+
+public partial class Program { }

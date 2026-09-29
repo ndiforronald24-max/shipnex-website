@@ -1,0 +1,96 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+*.local
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Editor directories and files
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sw?
+
+# .NET build output
+[Bb]in/
+[Oo]bj/
+TestResults/
+*.user
+*.coverage
+*.trx
+
+# Frontend / tooling caches
+.vite/
+.cache/
+.eslintcache
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# Test & coverage output
+coverage/
+
+# Local scratch files from audit tooling
+_*.txt
+_vercel/
+
+# Transient agent/session scratch output (dumps, probes, status flags)
+*.status
+*.tmp
+*.bak
+*.orig
+*.rej
+location.pathname
+p.Id
+p.TrackingNumber
+d.Id
+new
+tok.txt
+test_login.json
+check_up.txt
+
+# Session scratch dumps (build/test/inspect output written to *.txt).
+# The E2E audit report is the one exception - it is cited evidence.
+*.txt
+!audit_e2e_report.txt
+
+# One-off fix-up / codegen scripts from past sessions
+fix_*.py
+assemble*.py
+write_*.py
+update_*.py
+fix_*.ps1
+write_*.ps1
+fix1.ps1
+fix2.ps1
+verify_prompt.ps1
+final-check.ps1
+
+# Stray duplicate project folders left by an earlier codegen run.
+# Not referenced by backend/ShipNex.sln and not built - safe to delete on disk.
+backend/src/ShipNex/
+backend/tests/ShipNex/
+
+# Throwaway static prototypes
+dev_admin.html
+dev_home.html
+dev_pet.html
+dev_track.html

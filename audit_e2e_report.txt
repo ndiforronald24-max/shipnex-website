@@ -1,0 +1,99 @@
+================ ShipNex E2E AUDIT ================
+date: 2026-09-28T20:30:30.810Z
+
+---------- 1. FRONTEND ROUTES (vite dev server) ----------
+[PASS] frontend SPA shell served for all routes :: 28/28 returned 200 with <div id="root">
+
+---------- 2. STATIC ASSETS ----------
+[PASS] asset /favicon.svg :: status 200
+[PASS] asset /icons.svg :: status 200
+[PASS] asset /branding/site.webmanifest :: status 200
+[PASS] asset /branding/shipnex-icon.png :: status 200
+
+---------- 3. API BASICS + CORS ----------
+[PASS] GET /health :: expected 200, got 200
+[PASS] CORS preflight allows the dev frontend origin :: ACAO=http://localhost:5173
+
+---------- 4. AUTHENTICATION & AUTHORIZATION ----------
+[PASS] login with empty fields rejected :: expected 400, got 400
+[PASS] login with wrong password rejected :: expected 401, got 401
+[PASS] valid admin login :: status 200, role=SuperAdmin, tokenLen=677
+[PASS] anonymous GET /api/shipments blocked :: expected 401, got 401
+[PASS] forged token blocked :: expected 401, got 401
+[PASS] anonymous audit logs blocked :: expected 401, got 401
+[PASS] anonymous customers blocked :: expected 401, got 401
+[PASS] anonymous pets blocked :: expected 401, got 401
+[PASS] anonymous vehicles blocked :: expected 401, got 401
+[PASS] POST /api/auth/register (public signup) :: status 200
+[PASS] Customer role blocked from /api/admin/staff (RBAC) :: role=Customer, status 403
+[PASS] Customer role blocked from /api/shipments (RBAC) :: status 403
+
+---------- 5. SHIPMENT WORKFLOW ----------
+[PASS] GET /api/shipments (admin) :: 2 shipment(s)
+[PASS] POST /api/customers :: status 201, id=2b0e98c6-3ea2-4284-9b5f-8d4253feb310
+[PASS] POST /api/shipments (create) :: status 201, trackingNumber=USP-2026-641476, id=90c2fe6f-b0fe-48fd-9589-67a443ea0c50
+[PASS] tracking number is unique :: tn=USP-2026-641476
+[PASS] GET /api/shipments/{id} :: status 200
+[PASS] customer relationship stored :: customerId=2b0e98c6-3ea2-4284-9b5f-8d4253feb310
+[PASS] initial tracking event created :: 1 event(s)
+[PASS] PUT /api/shipments/{id}/status :: status 200, location=Audit City Hub, events=2
+[PASS] POST /api/shipments/{id}/tracking-events :: status 200
+
+---------- 6. PUBLIC TRACKING (anonymous) ----------
+[PASS] GET /api/tracking/{trackingNumber} :: status 200, type=shipment
+[PASS] tracking shows status :: status=OutForDelivery
+[PASS] tracking shows timeline :: 3 entries
+[PASS] tracking shows origin/destination :: New York -> Los Angeles
+[PASS] tracking shows latest reported location :: location=Audit Delivery Depot
+[PASS] tracking exposes estimated delivery field :: 2026-09-30T20:30:43.03753Z
+[PASS] tracking exposes map coordinates :: originLat=null, currentLat=null
+[PASS] public tracking hides private data :: leaked keys: none
+[PASS] unknown tracking number returns 404 :: expected 404, got 404
+[PASS] unknown tracking number leaks no internals :: leaked keys: none
+
+---------- 7. DOCUMENTS + UPLOAD VALIDATION ----------
+[PASS] GET /api/documents/types :: status 200, maxFileSizeBytes=10485760
+[PASS] upload of .exe rejected :: status 400 {"message":"Executable and script files ('.exe') are not allowed."}
+[PASS] MIME/extension mismatch rejected :: status 400
+[PASS] upload of .sh rejected :: status 400
+[PASS] valid PDF upload accepted :: status 201, id=3a024e43-4458-4e15-ab9f-2545819e9129
+[PASS] private upload hidden from public tracking :: 0 public doc(s)
+[PASS] anonymous document download blocked :: expected 401, got 401
+[PASS] PATCH document visibility :: status 200
+[PASS] customer-visible document appears publicly :: 1 public doc(s)
+[PASS] public document metadata hides storage path :: leaked keys: none
+[PASS] public-file download of visible document :: status 200
+[PASS] DELETE document (cleanup) :: status 204
+
+---------- 8. PET TRACKING ----------
+[PASS] GET /api/pets :: 1 pet shipment(s)
+[PASS] pet profile has name/type/breed :: Buddy / Dog / Golden Retriever
+[PASS] public pet tracking by tracking number :: status 200, type=pet
+[PASS] pet tracking shows name/type :: Buddy / Dog
+[PASS] pet tracking shows care/timeline entries :: 4 entries
+[PASS] pet tracking shows location :: Audit Pet Hub
+[PASS] pet tracking shows map coordinates :: originLat=25.7617, currentLat=39.74
+[PASS] pet tracking hides owner contact + internals :: leaked keys: none
+[PASS] PUT /api/pets/{id}/location :: status 200
+[PASS] pet location update is stored on the record :: lat=39.74, location=Audit Pet Hub
+[PASS] POST /api/pets/{id}/care-events :: status 200
+[PASS] care event is stored on the pet record :: careEvents=5
+[PASS] pet public tracking reflects the update :: careEvents=5
+
+---------- 9. ADMIN DASHBOARD, AUDIT & EMAIL ----------
+[PASS] GET /api/admin/stats :: status 200
+[PASS] GET /api/admin/audit-logs :: 28 entries
+[PASS] audit trail records E2E activity :: entries=28
+[PASS] GET /api/admin/staff :: status 200, 3 staff
+[PASS] GET /api/offices (anonymous, public page) :: 5 offices
+[PASS] GET /api/vehicles :: 0 vehicles
+[PASS] GET /api/notification-logs :: status 200
+[PASS] GET /api/email/status (provider config) :: {"provider":"Resend","fromAddress":"no-reply@shipnex.com","fromName":"ShipNex Logistics","smtpHost":"","smtpPort":"587","devMode":true,"isConfigured":false}
+
+---------- 10. PUBLIC FORMS ----------
+[PASS] POST /api/contact (valid) :: status 200
+[PASS] POST /api/contact (invalid) rejected :: expected 400, got 400
+
+================ SUMMARY ================
+PASS: 73   FAIL: 0   WARN: 0
+RESULT: ALL CHECKS PASSED

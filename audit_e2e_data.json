@@ -1,0 +1,430 @@
+{
+  "checks": [
+    {
+      "name": "frontend SPA shell served for all routes",
+      "status": "PASS",
+      "detail": "28/28 returned 200 with <div id=\"root\">"
+    },
+    {
+      "name": "asset /favicon.svg",
+      "status": "PASS",
+      "detail": "status 200"
+    },
+    {
+      "name": "asset /icons.svg",
+      "status": "PASS",
+      "detail": "status 200"
+    },
+    {
+      "name": "asset /branding/site.webmanifest",
+      "status": "PASS",
+      "detail": "status 200"
+    },
+    {
+      "name": "asset /branding/shipnex-icon.png",
+      "status": "PASS",
+      "detail": "status 200"
+    },
+    {
+      "name": "GET /health",
+      "status": "PASS",
+      "detail": "expected 200, got 200"
+    },
+    {
+      "name": "CORS preflight allows the dev frontend origin",
+      "status": "PASS",
+      "detail": "ACAO=http://localhost:5173"
+    },
+    {
+      "name": "login with empty fields rejected",
+      "status": "PASS",
+      "detail": "expected 400, got 400"
+    },
+    {
+      "name": "login with wrong password rejected",
+      "status": "PASS",
+      "detail": "expected 401, got 401"
+    },
+    {
+      "name": "valid admin login",
+      "status": "PASS",
+      "detail": "status 200, role=SuperAdmin, tokenLen=677"
+    },
+    {
+      "name": "anonymous GET /api/shipments blocked",
+      "status": "PASS",
+      "detail": "expected 401, got 401"
+    },
+    {
+      "name": "forged token blocked",
+      "status": "PASS",
+      "detail": "expected 401, got 401"
+    },
+    {
+      "name": "anonymous audit logs blocked",
+      "status": "PASS",
+      "detail": "expected 401, got 401"
+    },
+    {
+      "name": "anonymous customers blocked",
+      "status": "PASS",
+      "detail": "expected 401, got 401"
+    },
+    {
+      "name": "anonymous pets blocked",
+      "status": "PASS",
+      "detail": "expected 401, got 401"
+    },
+    {
+      "name": "anonymous vehicles blocked",
+      "status": "PASS",
+      "detail": "expected 401, got 401"
+    },
+    {
+      "name": "POST /api/auth/register (public signup)",
+      "status": "PASS",
+      "detail": "status 200"
+    },
+    {
+      "name": "Customer role blocked from /api/admin/staff (RBAC)",
+      "status": "PASS",
+      "detail": "role=Customer, status 403"
+    },
+    {
+      "name": "Customer role blocked from /api/shipments (RBAC)",
+      "status": "PASS",
+      "detail": "status 403"
+    },
+    {
+      "name": "GET /api/shipments (admin)",
+      "status": "PASS",
+      "detail": "2 shipment(s)"
+    },
+    {
+      "name": "POST /api/customers",
+      "status": "PASS",
+      "detail": "status 201, id=2b0e98c6-3ea2-4284-9b5f-8d4253feb310"
+    },
+    {
+      "name": "POST /api/shipments (create)",
+      "status": "PASS",
+      "detail": "status 201, trackingNumber=USP-2026-641476, id=90c2fe6f-b0fe-48fd-9589-67a443ea0c50"
+    },
+    {
+      "name": "tracking number is unique",
+      "status": "PASS",
+      "detail": "tn=USP-2026-641476"
+    },
+    {
+      "name": "GET /api/shipments/{id}",
+      "status": "PASS",
+      "detail": "status 200"
+    },
+    {
+      "name": "customer relationship stored",
+      "status": "PASS",
+      "detail": "customerId=2b0e98c6-3ea2-4284-9b5f-8d4253feb310"
+    },
+    {
+      "name": "initial tracking event created",
+      "status": "PASS",
+      "detail": "1 event(s)"
+    },
+    {
+      "name": "PUT /api/shipments/{id}/status",
+      "status": "PASS",
+      "detail": "status 200, location=Audit City Hub, events=2"
+    },
+    {
+      "name": "POST /api/shipments/{id}/tracking-events",
+      "status": "PASS",
+      "detail": "status 200"
+    },
+    {
+      "name": "GET /api/tracking/{trackingNumber}",
+      "status": "PASS",
+      "detail": "status 200, type=shipment"
+    },
+    {
+      "name": "tracking shows status",
+      "status": "PASS",
+      "detail": "status=OutForDelivery"
+    },
+    {
+      "name": "tracking shows timeline",
+      "status": "PASS",
+      "detail": "3 entries"
+    },
+    {
+      "name": "tracking shows origin/destination",
+      "status": "PASS",
+      "detail": "New York -> Los Angeles"
+    },
+    {
+      "name": "tracking shows latest reported location",
+      "status": "PASS",
+      "detail": "location=Audit Delivery Depot"
+    },
+    {
+      "name": "tracking exposes estimated delivery field",
+      "status": "PASS",
+      "detail": "2026-09-30T20:30:43.03753Z"
+    },
+    {
+      "name": "tracking exposes map coordinates",
+      "status": "PASS",
+      "detail": "originLat=null, currentLat=null"
+    },
+    {
+      "name": "public tracking hides private data",
+      "status": "PASS",
+      "detail": "leaked keys: none"
+    },
+    {
+      "name": "unknown tracking number returns 404",
+      "status": "PASS",
+      "detail": "expected 404, got 404"
+    },
+    {
+      "name": "unknown tracking number leaks no internals",
+      "status": "PASS",
+      "detail": "leaked keys: none"
+    },
+    {
+      "name": "GET /api/documents/types",
+      "status": "PASS",
+      "detail": "status 200, maxFileSizeBytes=10485760"
+    },
+    {
+      "name": "upload of .exe rejected",
+      "status": "PASS",
+      "detail": "status 400 {\"message\":\"Executable and script files ('.exe') are not allowed.\"}"
+    },
+    {
+      "name": "MIME/extension mismatch rejected",
+      "status": "PASS",
+      "detail": "status 400"
+    },
+    {
+      "name": "upload of .sh rejected",
+      "status": "PASS",
+      "detail": "status 400"
+    },
+    {
+      "name": "valid PDF upload accepted",
+      "status": "PASS",
+      "detail": "status 201, id=3a024e43-4458-4e15-ab9f-2545819e9129"
+    },
+    {
+      "name": "private upload hidden from public tracking",
+      "status": "PASS",
+      "detail": "0 public doc(s)"
+    },
+    {
+      "name": "anonymous document download blocked",
+      "status": "PASS",
+      "detail": "expected 401, got 401"
+    },
+    {
+      "name": "PATCH document visibility",
+      "status": "PASS",
+      "detail": "status 200"
+    },
+    {
+      "name": "customer-visible document appears publicly",
+      "status": "PASS",
+      "detail": "1 public doc(s)"
+    },
+    {
+      "name": "public document metadata hides storage path",
+      "status": "PASS",
+      "detail": "leaked keys: none"
+    },
+    {
+      "name": "public-file download of visible document",
+      "status": "PASS",
+      "detail": "status 200"
+    },
+    {
+      "name": "DELETE document (cleanup)",
+      "status": "PASS",
+      "detail": "status 204"
+    },
+    {
+      "name": "GET /api/pets",
+      "status": "PASS",
+      "detail": "1 pet shipment(s)"
+    },
+    {
+      "name": "pet profile has name/type/breed",
+      "status": "PASS",
+      "detail": "Buddy / Dog / Golden Retriever"
+    },
+    {
+      "name": "public pet tracking by tracking number",
+      "status": "PASS",
+      "detail": "status 200, type=pet"
+    },
+    {
+      "name": "pet tracking shows name/type",
+      "status": "PASS",
+      "detail": "Buddy / Dog"
+    },
+    {
+      "name": "pet tracking shows care/timeline entries",
+      "status": "PASS",
+      "detail": "4 entries"
+    },
+    {
+      "name": "pet tracking shows location",
+      "status": "PASS",
+      "detail": "Audit Pet Hub"
+    },
+    {
+      "name": "pet tracking shows map coordinates",
+      "status": "PASS",
+      "detail": "originLat=25.7617, currentLat=39.74"
+    },
+    {
+      "name": "pet tracking hides owner contact + internals",
+      "status": "PASS",
+      "detail": "leaked keys: none"
+    },
+    {
+      "name": "PUT /api/pets/{id}/location",
+      "status": "PASS",
+      "detail": "status 200"
+    },
+    {
+      "name": "pet location update is stored on the record",
+      "status": "PASS",
+      "detail": "lat=39.74, location=Audit Pet Hub"
+    },
+    {
+      "name": "POST /api/pets/{id}/care-events",
+      "status": "PASS",
+      "detail": "status 200"
+    },
+    {
+      "name": "care event is stored on the pet record",
+      "status": "PASS",
+      "detail": "careEvents=5"
+    },
+    {
+      "name": "pet public tracking reflects the update",
+      "status": "PASS",
+      "detail": "careEvents=5"
+    },
+    {
+      "name": "GET /api/admin/stats",
+      "status": "PASS",
+      "detail": "status 200"
+    },
+    {
+      "name": "GET /api/admin/audit-logs",
+      "status": "PASS",
+      "detail": "28 entries"
+    },
+    {
+      "name": "audit trail records E2E activity",
+      "status": "PASS",
+      "detail": "entries=28"
+    },
+    {
+      "name": "GET /api/admin/staff",
+      "status": "PASS",
+      "detail": "status 200, 3 staff"
+    },
+    {
+      "name": "GET /api/offices (anonymous, public page)",
+      "status": "PASS",
+      "detail": "5 offices"
+    },
+    {
+      "name": "GET /api/vehicles",
+      "status": "PASS",
+      "detail": "0 vehicles"
+    },
+    {
+      "name": "GET /api/notification-logs",
+      "status": "PASS",
+      "detail": "status 200"
+    },
+    {
+      "name": "GET /api/email/status (provider config)",
+      "status": "PASS",
+      "detail": "{\"provider\":\"Resend\",\"fromAddress\":\"no-reply@shipnex.com\",\"fromName\":\"ShipNex Logistics\",\"smtpHost\":\"\",\"smtpPort\":\"587\",\"devMode\":true,\"isConfigured\":false}"
+    },
+    {
+      "name": "POST /api/contact (valid)",
+      "status": "PASS",
+      "detail": "status 200"
+    },
+    {
+      "name": "POST /api/contact (invalid) rejected",
+      "status": "PASS",
+      "detail": "expected 400, got 400"
+    }
+  ],
+  "frontendRoutes": [
+    "/",
+    "/about",
+    "/services",
+    "/services/air-freight",
+    "/services/sea-freight",
+    "/services/road-freight",
+    "/services/express-shipping",
+    "/services/vehicle-shipping",
+    "/services/pet-live-animal",
+    "/track",
+    "/track/pet",
+    "/offices",
+    "/faqs",
+    "/contact",
+    "/privacy",
+    "/terms",
+    "/login",
+    "/register",
+    "/admin",
+    "/admin/shipments",
+    "/admin/customers",
+    "/admin/pet-shipments",
+    "/admin/documents",
+    "/admin/notifications",
+    "/admin/offices",
+    "/admin/audit-logs",
+    "/admin/settings",
+    "/no-such-page-404"
+  ],
+  "corsPreflight": {
+    "status": 204,
+    "acao": "http://localhost:5173"
+  },
+  "login": {
+    "status": 200,
+    "role": "SuperAdmin"
+  },
+  "shipment": {
+    "id": "90c2fe6f-b0fe-48fd-9589-67a443ea0c50",
+    "trackingNumber": "USP-2026-641476",
+    "createStatus": 201
+  },
+  "publicTracking": {
+    "status": 200,
+    "type": "shipment",
+    "timeline": 3,
+    "location": "Audit Delivery Depot"
+  },
+  "documents": {
+    "docId": "3a024e43-4458-4e15-ab9f-2545819e9129"
+  },
+  "emailStatus": {
+    "provider": "Resend",
+    "fromAddress": "no-reply@shipnex.com",
+    "fromName": "ShipNex Logistics",
+    "smtpHost": "",
+    "smtpPort": "587",
+    "devMode": true,
+    "isConfigured": false
+  }
+}

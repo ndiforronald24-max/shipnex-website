@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: shipnex-postgres
+    environment:
+      POSTGRES_DB: shipnex
+      POSTGRES_USER: shipnex
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    expose:
+      - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shipnex"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    networks:
+      - shipnex-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  # Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shipnex-backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - Database__Provider=PostgreSQL
+      - Database__ConnectionString=Host=postgres;Port=5432;Database=shipnex;Username=shipnex;Password=${DB_PASSWORD}
+      - Jwt__SecretKey=${JWT_SECRET}
+      - Jwt__Issuer=ShipNex
+      - Jwt__Audience=ShipNexApp
+      - Email__SmtpHost=${SMTP_HOST}
+      - Email__SmtpPort=${SMTP_PORT:-587}
+      - Email__Username=${SMTP_USERNAME}
+      - Email__Password=${SMTP_PASSWORD}
+      - Email__FromAddress=noreply@shipnex.com
+      - Email__FromName=ShipNex Logistics
+      - FileStorage__Provider=Local
+      - FileStorage__LocalPath=/app/uploads
+    volumes:
+      - uploads_data:/app/uploads
+      - logs_data:/app/logs
+    expose:
+      - "80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+    networks:
+      - shipnex-network
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  # Nginx Reverse Proxy with HTTPS
+  nginx:
+    image: nginx:alpine
+    container_name: shipnex-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.prod.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - ./dist:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+    restart: always
+    networks:
+      - shipnex-network
+
+volumes:
+  postgres_data:
+  uploads_data:
+  logs_data:
+
+networks:
+  shipnex-network:
+    driver: bridge
