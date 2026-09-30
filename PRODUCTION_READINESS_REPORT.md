@@ -408,10 +408,19 @@ Items 1 and 2 were re-run on **30 Sep 2026** now that command execution works. I
 After clearing regenerable NuGet/temp caches:
 
 * `dotnet restore` → **exit 0**
-* `dotnet build -c Release` → **exit 0, 0 warnings, 0 errors**, all 6 projects
+* `dotnet build -c Release` → **exit 0, 0 errors**, all 6 projects
 * `ShipNex.Application.Tests` → **83/83 passed**
 * `ShipNex.Api.Tests` → **22/22 passed**
 * **105/105 total, 0 failed** — unchanged from the §2 baseline
+
+> **Correction — the build is not warning-free.** An earlier incremental build reported
+> "0 warnings" because `ShipNex.Infrastructure` was already up to date and therefore was
+> not recompiled. A full rebuild of that project surfaces **15 pre-existing nullable
+> warnings** (`CS8601`, `CS8604`, `CS8625`) in `CustomerService`, `AuthService`,
+> `ShipmentService`, `PetShipmentService` and `EmailNotificationService`. They are
+> **not** caused by the `Program.cs` fix and do not fail the build (`<TreatWarningsAsErrors>`
+> is not set), but the earlier "0 warnings" figure was an artifact of incremental
+> compilation and should not be relied on.
 
 > **Defect found and fixed during this verification.** The build initially failed with
 > `CS0246: The type or namespace name 'HealthCheckOptions' could not be found`
