@@ -252,7 +252,7 @@ public class ShipmentService : IShipmentService
             {
                 ShipmentId = shipment.Id,
                 Location = request.Location,
-                Description = request.Description,
+                Description = request.Description ?? string.Empty,
                 Status = shipment.Status,
                 Timestamp = DateTime.UtcNow
             };
@@ -327,7 +327,7 @@ public class ShipmentService : IShipmentService
             {
                 ShipmentId = shipment.Id,
                 Location = request.LocationName,
-                Description = request.Description,
+                Description = request.Description ?? string.Empty,
                 Status = shipment.Status,
                 Latitude = request.Latitude,
                 Longitude = request.Longitude,

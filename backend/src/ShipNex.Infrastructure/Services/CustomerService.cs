@@ -22,8 +22,8 @@ public class CustomerService : ICustomerService
             FirstName = request.FirstName,
             LastName = request.LastName,
             Email = request.Email,
-            Phone = request.Phone,
-            Address = request.Address,
+            Phone = request.Phone ?? string.Empty,
+            Address = request.Address ?? string.Empty,
             Role = ShipNexRoles.Customer
         };
 
@@ -55,8 +55,8 @@ public class CustomerService : ICustomerService
 
         customer.FirstName = request.FirstName;
         customer.LastName = request.LastName;
-        customer.Phone = request.Phone;
-        customer.Address = request.Address;
+        customer.Phone = request.Phone ?? string.Empty;
+        customer.Address = request.Address ?? string.Empty;
 
         await _context.SaveChangesAsync();
         return MapToResponse(customer);

@@ -307,7 +307,11 @@ public class EmailNotificationService : IEmailNotificationService
                 .Select(p => p.Id.ToString())
                 .ToListAsync();
 
-            query = query.Where(l => shipmentIds.Contains(l.ShipmentId) || petIds.Contains(l.PetShipmentId));
+            // ShipmentId / PetShipmentId are nullable on NotificationLog, so guard
+            // before Contains - a null id can never match a real tracking id anyway.
+            query = query.Where(l =>
+                (l.ShipmentId != null && shipmentIds.Contains(l.ShipmentId)) ||
+                (l.PetShipmentId != null && petIds.Contains(l.PetShipmentId)));
         }
 
                 return await query.OrderByDescending(l => l.CreatedAt).Take(100).ToListAsync();
@@ -361,12 +365,15 @@ public class EmailNotificationService : IEmailNotificationService
                 .Select(p => p.Id.ToString())
                 .ToList();
 
+            // Subject is nullable on NotificationLog. The previous `l.Subject!` only
+            // silenced the compiler - it threw NullReferenceException at runtime for
+            // any log row with a null subject, taking the admin search endpoint down.
             query = query.Where(l =>
                 l.Recipient.ToLower().Contains(searchLower) ||
                 l.Template.ToLower().Contains(searchLower) ||
-                l.Subject!.ToLower().Contains(searchLower) ||
-                shipmentFilter.Contains(l.ShipmentId) ||
-                petFilter.Contains(l.PetShipmentId));
+                (l.Subject != null && l.Subject.ToLower().Contains(searchLower)) ||
+                (l.ShipmentId != null && shipmentFilter.Contains(l.ShipmentId)) ||
+                (l.PetShipmentId != null && petFilter.Contains(l.PetShipmentId)));
         }
 
         var totalCount = await query.CountAsync();

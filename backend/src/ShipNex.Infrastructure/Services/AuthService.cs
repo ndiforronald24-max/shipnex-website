@@ -43,7 +43,7 @@ public class AuthService : IAuthService
             LastName = request.LastName,
             Email = request.Email,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
-            Phone = request.Phone,
+            Phone = request.Phone ?? string.Empty,
             Role = ShipNexRoles.Customer
         };
 
@@ -52,8 +52,8 @@ public class AuthService : IAuthService
             FirstName = request.FirstName,
             LastName = request.LastName,
             Email = request.Email,
-            Phone = request.Phone,
-            Address = request.Address,
+            Phone = request.Phone ?? string.Empty,
+            Address = request.Address ?? string.Empty,
             Role = ShipNexRoles.Customer,
             UserId = user.Id,
             User = user

@@ -252,7 +252,7 @@ public class PetShipmentService : IPetShipmentService
             PetShipmentId = pet.Id,
             DocumentType = request.DocumentType,
             FileName = request.FileName,
-            FileUrl = request.FileUrl,
+            FileUrl = request.FileUrl ?? string.Empty,
             FileSize = request.FileSize,
             CustomerVisible = request.CustomerVisible
         };
@@ -354,7 +354,7 @@ public class PetShipmentService : IPetShipmentService
                 e.Type.ToString(), e.CareStatus.ToString(), e.EventTime,
                 e.Latitude, e.Longitude, e.CustomerVisible)).ToList() ?? new List<PetCareEventResponse>(),
             pet.Documents?.Select(d => new PetDocumentResponse(
-                d.Id.ToString(), null, d.DocumentType, d.FileName, d.FileUrl,
+                d.Id.ToString(), d.DocumentNumber, d.DocumentType, d.FileName, d.FileUrl,
                 d.ContentType, d.FileSize, d.Description, d.IssuedAt,
                 d.CreatedAt, d.IsVerified, d.CustomerVisible)).ToList() ?? new List<PetDocumentResponse>()
         );
