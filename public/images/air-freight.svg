@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-labelledby="af-title af-desc" preserveAspectRatio="xMidYMid slice">
+  <title id="af-title">Air freight cargo aircraft on approach</title>
+  <desc id="af-desc">A wide-body cargo freighter climbing above the clouds with a palletised load in its hold.</desc>
+  <defs>
+    <linearGradient id="afSky" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0" stop-color="#071a4d"/>
+      <stop offset="0.45" stop-color="#1d4fa3"/>
+      <stop offset="0.8" stop-color="#5f9ad6"/>
+      <stop offset="1" stop-color="#b9d8f0"/>
+    </linearGradient>
+    <linearGradient id="afFuse" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.45" stop-color="#e6ecf5"/>
+      <stop offset="0.75" stop-color="#b9c6d8"/>
+      <stop offset="1" stop-color="#8e9db4"/>
+    </linearGradient>
+    <linearGradient id="afWing" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dfe6f0"/>
+      <stop offset="1" stop-color="#93a3bb"/>
+    </linearGradient>
+    <linearGradient id="afHold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#28344a"/>
+      <stop offset="1" stop-color="#101a2c"/>
+    </linearGradient>
+    <radialGradient id="afSun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="600" height="400" fill="url(#afSky)"/>
+  <circle cx="132" cy="86" r="150" fill="url(#afSun)"/>
+
+  <!-- High cirrus -->
+  <g fill="#ffffff" opacity="0.16">
+    <ellipse cx="110" cy="150" rx="130" ry="7"/>
+    <ellipse cx="330" cy="96" rx="90" ry="5"/>
+    <ellipse cx="470" cy="168" rx="110" ry="6"/>
+  </g>
+
+  <!-- Cloud deck -->
+  <g fill="#ffffff">
+    <ellipse cx="60" cy="330" rx="130" ry="34" opacity="0.5"/>
+    <ellipse cx="170" cy="348" rx="120" ry="30" opacity="0.42"/>
+    <ellipse cx="420" cy="336" rx="150" ry="32" opacity="0.46"/>
+    <ellipse cx="560" cy="356" rx="110" ry="28" opacity="0.4"/>
+    <ellipse cx="300" cy="372" rx="160" ry="26" opacity="0.34"/>
+  </g>
+
+  <!-- Contrail streaming from the tail -->
+  <path d="M4 272 Q58 226 104 194" fill="none" stroke="#ffffff" stroke-width="11" stroke-linecap="round" opacity="0.18"/>
+  <path d="M4 272 Q58 226 104 194" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.32"/>
+
+  <!-- Vertical stabiliser (swept back) -->
+  <path d="M190 158 L122 106 L58 110 L96 172 Z" fill="url(#afWing)"/>
+  <path d="M122 106 L58 110 L52 126 L118 122 Z" fill="#ff6f00"/>
+
+  <!-- Fuselage -->
+  <path d="M96 196 C96 176 120 166 160 164 L430 152 C500 148 550 160 566 182 C570 190 566 198 552 202 L150 226 C112 228 96 216 96 196 Z" fill="url(#afFuse)"/>
+  <path d="M540 162 C558 170 566 178 566 190 C562 198 552 202 540 204 C548 190 548 176 540 162 Z" fill="#2b4a7d"/>
+  <g fill="#2b4a7d" opacity="0.7">
+    <rect x="206" y="184" width="7" height="6" rx="2"/>
+    <rect x="224" y="183" width="7" height="6" rx="2"/>
+    <rect x="242" y="182" width="7" height="6" rx="2"/>
+    <rect x="260" y="181" width="7" height="6" rx="2"/>
+    <rect x="278" y="180" width="7" height="6" rx="2"/>
+    <rect x="296" y="179" width="7" height="6" rx="2"/>
+    <rect x="314" y="178" width="7" height="6" rx="2"/>
+    <rect x="332" y="177" width="7" height="6" rx="2"/>
+    <rect x="350" y="176" width="7" height="6" rx="2"/>
+    <rect x="368" y="175" width="7" height="6" rx="2"/>
+  </g>
+  <path d="M140 206 L512 188 L512 200 L142 219 Z" fill="#1a237e"/>
+  <path d="M140 206 L512 188 L512.2 191.5 L140.2 209.5 Z" fill="#ff6f00"/>
+
+  <!-- Open cargo door with palletised freight -->
+  <path d="M402 162 L472 159 L472 199 L402 202 Z" fill="url(#afHold)"/>
+  <path d="M402 162 L472 159 L472 167 L402 170 Z" fill="#ff8f00" opacity="0.85"/>
+  <g>
+    <rect x="408" y="176" width="20" height="21" rx="2" fill="#c8a06a"/>
+    <rect x="408" y="176" width="20" height="5" fill="#a67c46"/>
+    <rect x="432" y="174" width="17" height="23" rx="2" fill="#9fb4cc"/>
+    <rect x="432" y="174" width="17" height="5" fill="#7b91ab"/>
+    <rect x="453" y="178" width="14" height="19" rx="2" fill="#d9dee6"/>
+    <rect x="453" y="178" width="14" height="4" fill="#b3bcc9"/>
+    <rect x="404" y="196" width="68" height="4" rx="1" fill="#5b6a80"/>
+  </g>
+
+  <!-- Main wing (swept back, tapered chord) -->
+  <path d="M368 216 L100 294 L84 278 L302 208 Z" fill="url(#afWing)"/>
+  <path d="M366 216 L102 292 L99 286 L363 211 Z" fill="#ffffff" opacity="0.45"/>
+  <path d="M302 208 L84 278 L84 282 L304 212 Z" fill="#7c8ba3" opacity="0.35"/>
+
+  <!-- Winglet -->
+  <path d="M98 292 L74 306 L58 290 L82 276 Z" fill="#a9b6cb"/>
+  <path d="M74 306 L58 290 L56 296 L72 310 Z" fill="#1a237e"/>
+
+  <!-- Engines -->
+  <g transform="translate(260 253) rotate(-17)">
+    <rect x="-8" y="-26" width="14" height="16" rx="3" fill="#a9b6cb"/>
+    <rect x="-34" y="-11" width="68" height="22" rx="11" fill="#eef2f8"/>
+    <rect x="18" y="-11" width="15" height="22" rx="6" fill="#8b99b1"/>
+    <circle cx="27" cy="0" r="5" fill="#5c6b83"/>
+  </g>
+  <g transform="translate(180 278) rotate(-17)">
+    <rect x="-8" y="-26" width="14" height="16" rx="3" fill="#a9b6cb"/>
+    <rect x="-34" y="-11" width="68" height="22" rx="11" fill="#eef2f8"/>
+    <rect x="18" y="-11" width="15" height="22" rx="6" fill="#8b99b1"/>
+    <circle cx="27" cy="0" r="5" fill="#5c6b83"/>
+  </g>
+
+  <!-- Nav light -->
+  <circle cx="58" cy="292" r="4" fill="#ff4d4d"/>
+</svg>

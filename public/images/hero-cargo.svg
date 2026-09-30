@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="hero-title hero-desc" preserveAspectRatio="xMidYMid slice">
+  <title id="hero-title">Cargo aircraft loading at the apron</title>
+  <desc id="hero-desc">A wide-body freighter parked at a terminal stand while a high-reach loader and ground crew move palletised freight.</desc>
+  <defs>
+    <linearGradient id="hSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#050f38"/>
+      <stop offset="0.42" stop-color="#123a86"/>
+      <stop offset="0.72" stop-color="#2f6bb4"/>
+      <stop offset="0.9" stop-color="#7aa7d8"/>
+      <stop offset="1" stop-color="#e6b183"/>
+    </linearGradient>
+    <linearGradient id="hApron" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#22406e"/>
+      <stop offset="1" stop-color="#0d1c3a"/>
+    </linearGradient>
+    <linearGradient id="hFuse" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.45" stop-color="#e9eef6"/>
+      <stop offset="1" stop-color="#93a2b8"/>
+    </linearGradient>
+    <linearGradient id="hWing" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#e8edf5"/>
+      <stop offset="1" stop-color="#8c9cb4"/>
+    </linearGradient>
+    <radialGradient id="hGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffd9a0" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#ffb35c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="1600" height="900" fill="url(#hSky)"/>
+  <circle cx="1180" cy="640" r="420" fill="url(#hGlow)"/>
+  <g fill="#ffffff" opacity="0.12">
+    <ellipse cx="260" cy="200" rx="260" ry="9"/>
+    <ellipse cx="900" cy="140" rx="190" ry="7"/>
+    <ellipse cx="1320" cy="252" rx="220" ry="8"/>
+    <ellipse cx="640" cy="286" rx="160" ry="6"/>
+  </g>
+
+  <!-- Distant terminal + city -->
+  <g fill="#0b1c40" opacity="0.85">
+    <rect x="0" y="560" width="330" height="130"/>
+    <rect x="1200" y="540" width="400" height="150"/>
+    <rect x="250" y="500" width="60" height="60"/>
+    <rect x="330" y="520" width="40" height="40"/>
+  </g>
+  <g fill="#ffd9a0" opacity="0.55">
+    <rect x="40" y="600" width="10" height="8"/><rect x="80" y="600" width="10" height="8"/>
+    <rect x="120" y="600" width="10" height="8"/><rect x="200" y="600" width="10" height="8"/>
+    <rect x="240" y="600" width="10" height="8"/><rect x="1260" y="600" width="10" height="8"/>
+    <rect x="1300" y="600" width="10" height="8"/><rect x="1340" y="600" width="10" height="8"/>
+    <rect x="1420" y="600" width="10" height="8"/><rect x="1500" y="600" width="10" height="8"/>
+  </g>
+
+  <!-- Apron -->
+  <rect y="660" width="1600" height="240" fill="url(#hApron)"/>
+  <g fill="#ff6f00" opacity="0.55">
+    <rect x="60" y="726" width="180" height="6" rx="3"/>
+    <rect x="1180" y="726" width="300" height="6" rx="3"/>
+  </g>
+  <g fill="#ffffff" opacity="0.1">
+    <rect x="280" y="712" width="240" height="3" rx="1.5"/>
+    <rect x="900" y="712" width="200" height="3" rx="1.5"/>
+  </g>
+
+  <!-- Ground service vehicles -->
+  <g>
+    <rect x="1120" y="592" width="170" height="66" rx="6" fill="#ff8f00"/>
+    <rect x="1150" y="560" width="74" height="40" rx="6" fill="#e8edf5"/>
+    <rect x="1156" y="568" width="30" height="20" rx="3" fill="#2b4a7d"/>
+    <rect x="1192" y="568" width="26" height="20" rx="3" fill="#2b4a7d"/>
+    <circle cx="1150" cy="662" r="20" fill="#16223a"/><circle cx="1150" cy="662" r="8" fill="#7c8ba3"/>
+    <circle cx="1258" cy="662" r="20" fill="#16223a"/><circle cx="1258" cy="662" r="8" fill="#7c8ba3"/>
+  </g>
+  <!-- Belt loader -->
+  <g>
+    <path d="M980 660 L1180 592" stroke="#c3ccdb" stroke-width="10" stroke-linecap="round"/>
+    <rect x="952" y="622" width="52" height="38" rx="5" fill="#ff6f00"/>
+    <circle cx="972" cy="662" r="16" fill="#16223a"/><circle cx="972" cy="662" r="6" fill="#7c8ba3"/>
+    <circle cx="1000" cy="662" r="16" fill="#16223a"/><circle cx="1000" cy="662" r="6" fill="#7c8ba3"/>
+  </g>
+
+  <!-- Aircraft: tail fin -->
+  <path d="M330 560 L232 440 L318 434 L392 546 Z" fill="url(#hWing)"/>
+  <path d="M232 440 L200 424 L214 470 L300 462 Z" fill="#ff6f00"/>
+
+  <!-- Aircraft: fuselage -->
+  <path d="M300 580 C300 546 340 528 400 526 L1010 512 C1120 510 1210 536 1244 580 C1252 594 1246 606 1224 610 L390 622 C330 624 300 610 300 580 Z" fill="url(#hFuse)"/>
+  <path d="M1216 546 C1242 560 1252 572 1250 590 C1244 602 1230 608 1212 610 C1224 588 1224 566 1216 546 Z" fill="#2b4a7d"/>
+  <!-- Window strip -->
+  <g fill="#2b4a7d" opacity="0.65">
+    <rect x="470" y="562" width="9" height="8" rx="3"/>
+    <rect x="500" y="561" width="9" height="8" rx="3"/>
+    <rect x="530" y="560" width="9" height="8" rx="3"/>
+    <rect x="560" y="559" width="9" height="8" rx="3"/>
+    <rect x="590" y="558" width="9" height="8" rx="3"/>
+    <rect x="620" y="557" width="9" height="8" rx="3"/>
+    <rect x="650" y="556" width="9" height="8" rx="3"/>
+    <rect x="680" y="555" width="9" height="8" rx="3"/>
+    <rect x="710" y="554" width="9" height="8" rx="3"/>
+    <rect x="740" y="553" width="9" height="8" rx="3"/>
+  </g>
+  <!-- Livery -->
+  <path d="M360 592 L1190 566 L1192 592 L362 618 Z" fill="#1a237e"/>
+  <path d="M360 592 L1190 566 L1190.4 571.5 L360.3 597.5 Z" fill="#ff6f00"/>
+
+  <!-- Open cargo hold with pallets -->
+  <path d="M470 540 L600 538 L600 604 L470 606 Z" fill="#16223a"/>
+  <path d="M470 540 L600 538 L600 550 L470 552 Z" fill="#ff8f00" opacity="0.9"/>
+  <g>
+    <rect x="480" y="562" width="34" height="38" rx="3" fill="#c8a06a"/>
+    <rect x="480" y="562" width="34" height="8" fill="#a67c46"/>
+    <rect x="520" y="558" width="30" height="42" rx="3" fill="#9fb4cc"/>
+    <rect x="520" y="558" width="30" height="8" fill="#7b91ab"/>
+    <rect x="556" y="564" width="36" height="36" rx="3" fill="#d9dee6"/>
+    <rect x="556" y="564" width="36" height="8" fill="#b3bcc9"/>
+  </g>
+
+  <!-- Main wing + engines -->
+  <path d="M620 606 L120 700 L96 664 L580 570 Z" fill="url(#hWing)"/>
+  <path d="M618 608 L124 696 L120 686 L616 600 Z" fill="#ffffff" opacity="0.35"/>
+  <g transform="translate(400 640) rotate(14)">
+    <rect x="-14" y="-34" width="26" height="22" rx="4" fill="#a9b6cb"/>
+    <rect x="-62" y="-14" width="124" height="40" rx="20" fill="#eef2f8"/>
+    <rect x="40" y="-14" width="24" height="40" rx="11" fill="#8b99b1"/>
+    <circle cx="54" cy="6" r="9" fill="#5c6b83"/>
+  </g>
+  <g transform="translate(240 674) rotate(14)">
+    <rect x="-14" y="-32" width="24" height="20" rx="4" fill="#a9b6cb"/>
+    <rect x="-58" y="-13" width="116" height="37" rx="18" fill="#eef2f8"/>
+    <rect x="36" y="-13" width="22" height="37" rx="10" fill="#8b99b1"/>
+    <circle cx="49" cy="5.5" r="8" fill="#5c6b83"/>
+  </g>
+
+  <!-- Nose gear -->
+  <g fill="#16223a">
+    <rect x="1180" y="606" width="8" height="46"/>
+    <rect x="1166" y="648" width="36" height="10" rx="5"/>
+  </g>
+  <!-- Main gear -->
+  <g fill="#16223a">
+    <rect x="400" y="616" width="9" height="36"/>
+    <rect x="384" y="648" width="42" height="11" rx="5"/>
+    <rect x="470" y="614" width="9" height="38"/>
+    <rect x="454" y="648" width="42" height="11" rx="5"/>
+  </g>
+
+  <!-- Apron lights -->
+  <g fill="#ffd9a0">
+    <circle cx="120" cy="700" r="4"/><circle cx="420" cy="712" r="4"/>
+    <circle cx="720" cy="700" r="4"/><circle cx="1020" cy="712" r="4"/>
+    <circle cx="1320" cy="700" r="4"/><circle cx="1500" cy="712" r="4"/>
+  </g>
+  <g fill="#ffd9a0" opacity="0.25">
+    <circle cx="120" cy="700" r="16"/><circle cx="720" cy="700" r="16"/>
+    <circle cx="1320" cy="700" r="16"/>
+  </g>
+</svg>
