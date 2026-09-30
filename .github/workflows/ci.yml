@@ -80,6 +80,12 @@ jobs:
       - name: Run linter
         run: npm run lint
 
+      # Catches what tsc cannot: duplicate route paths (React Router silently
+      # uses the first match), dead navigation links, orphaned page components,
+      # and admin routes declared outside an auth guard. Dependency-free, ~1s.
+      - name: Check routes and navigation
+        run: npm run test:routes
+
       - name: Build frontend
         run: npm run build
 
