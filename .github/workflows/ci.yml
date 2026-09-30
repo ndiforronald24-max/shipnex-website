@@ -89,11 +89,45 @@ jobs:
           name: frontend-dist
           path: dist/
 
+  # Deployment config validation
+  # Closes the two §11.3 checks that could not be run on the build machine,
+  # where neither docker nor nginx is installed. Both are pure config
+  # validation, so they belong in CI rather than being deferred forever.
+  config-validation:
+    name: Deployment Config Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # §11.3 #3 - the compose edits must actually parse. A malformed
+      # docker-compose.prod.yml would otherwise only surface at deploy time,
+      # after the image has already been pushed.
+      - name: Validate docker-compose.prod.yml
+        run: docker compose -f docker-compose.prod.yml config > /dev/null
+
+      # §11.3 #4 - nginx.prod.conf carries the CSP string and
+      # client_max_body_size. A typo in the CSP would otherwise ship and
+      # silently break Supabase Realtime / Google Maps in production.
+      - name: Validate nginx.prod.conf
+        run: |
+          docker run --rm \
+            -v "$PWD/nginx.prod.conf:/etc/nginx/nginx.conf:ro" \
+            nginx:alpine nginx -t
+
+      # Also check the dev config, which the compose stack mounts as well.
+      - name: Validate nginx.conf
+        run: |
+          docker run --rm \
+            -v "$PWD/nginx.conf:/etc/nginx/nginx.conf:ro" \
+            nginx:alpine nginx -t
+
   # Docker Build and Push
   docker:
     name: Docker Build & Push
     runs-on: ubuntu-latest
-    needs: [backend, frontend]
+    needs: [backend, frontend, config-validation]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     permissions:
