@@ -25,9 +25,9 @@ by a command that was executed or a file that was read; unverifiable items are e
 | API runtime behaviour | ✅ Health, tracking, auth, rate limiting, public docs verified live |
 | Live full‑stack E2E (real servers, 28 Sep) | ✅ **73 / 73 checks pass** — 8 API/DTO defects found & fixed (§10) |
 | Security controls | ✅ Solid (JWT fail‑fast, RBAC, rate limits, private document storage, audit trail) |
-| **Blockers before go‑live** | ⛔ **2** (see §8 — PostgreSQL schema has no creation path; forwarded headers missing behind the proxy) |
 | Mobile support | ⚠️ Responsive web only — no PWA, no native Android/iOS project |
-| CI/CD | ⚠️ CI runs (partial test coverage); the deploy job is still a placeholder |
+| CI/CD | ✅ Backend + frontend + image build green; deploy job is now a real SSH deploy gated on a readiness probe (§11.1 #5) |
+| **Blockers before go‑live** | ⛔ **0 open code defects** (re-confirmed by execution, 30 Sep — see §11.3). Items 1–2 of §11.3 are now **verified by running them**; items 3–6 still require tooling this machine does not have |
 
 ---
 
@@ -353,3 +353,120 @@ and the release-built Kestrel API on `http://localhost:5000`.
 remaining go-live blockers are unchanged from §8 (PostgreSQL schema creation path and
 `UseForwardedHeaders` behind the proxy) - both are deployment-time configuration, not application
 defects.
+
+---
+
+## 11. Configuration & CI/CD hardening pass (29 Sep 2026)
+
+A follow-up audit focused on deployment assets and pipeline configuration. Six defects
+were fixed. **None of them were re-verified by executing the build or the stack** — the
+terminal was unavailable in this session (see §11.3), so every claim below is backed by
+reading the file that contains the defect, not by a command output.
+
+### 11.1 Defects found and fixed
+
+| # | Severity | Defect | Fix |
+|---|---|---|---|
+| 1 | ⛔ **P0** | **Production would never send a single email.** `appsettings.json` ships `Email:DevMode: true` and `appsettings.Production.json` did not override it, while neither compose file set `Email__DevMode`. `SmtpEmailService.SendAsync` returns `EmailResult.Ok(...)` *without sending* when DevMode is on, so `EmailNotificationService` records the notification as **Sent** — a silent, high-severity data-integrity failure: the admin UI shows delivered customer mail that was never delivered | `Email:DevMode = false` in `appsettings.Production.json`; `Email__DevMode=false` hard-pinned in `docker-compose.prod.yml`; fail-fast throw in `Program.cs` when the host is `Production` and the flag is true |
+| 2 | 🔴 **P0** | **Any document over 1 MB was rejected with 413 at the proxy.** The API accepts 10 MB (`DocumentUploadValidator.MaxFileSizeBytes = 10485760` + 64 KB multipart overhead) but nginx defaults to `client_max_body_size 1m`, and neither `nginx.prod.conf` nor `nginx.conf` set it. Pet health certificates and customs paperwork above 1 MB could never be uploaded in production | `client_max_body_size 12m` in both nginx configs, with the API limit referenced in the comment so the two move together |
+| 3 | 🟠 P1 | **`deploy.sh` (the "Production Deployment Script") deployed the development stack** — `COMPOSE_FILE="docker-compose.yml"`, i.e. no TLS terminator, no `nginx.prod.conf`, local-volume file storage. It also `sed`-patched `nginx.conf` (the dev file) to "enable HTTPS" while the prod stack mounts `nginx.prod.conf` | `COMPOSE_FILE` now defaults to `docker-compose.prod.yml` (overridable); the `sed` patch block is removed as unnecessary |
+| 4 | 🟠 P1 | **`deploy.sh` health checks could not succeed against the production topology.** It probed `http://localhost:5000/health`, but the prod stack deliberately does **not** publish the API port (`expose` only), so the probe would always fail and abort every deploy. It then probed `http://localhost` for the frontend, which the prod stack answers with a 301 to HTTPS (`curl -f` treats 301 as success, so a broken TLS path passed anyway) | Readiness is now polled via `docker inspect` on the container health status, then through `https://$DOMAIN/health/ready` and `https://$DOMAIN/` — the same path a customer uses |
+| 5 | 🟠 P1 | **The CI `deploy` job was a no-op placeholder** (`echo "Deploying..."` plus commented-out examples). Main-branch merges reported a green pipeline while deploying nothing | Real SSH-driven deploy reusing `deploy.sh`, pinning the host key via `ssh-keyscan`, failing fast with a named error if `DEPLOY_HOST` / `DEPLOY_USER` / `DEPLOY_SSH_KEY` / `DEPLOY_PATH` are unset, then gating the release on `/health/ready` (30 attempts × 5 s) |
+| 6 | 🟡 P2 | **Server-side Realtime config was documented but never wired.** `.env.example` and `docs/supabase-realtime-setup.md` instruct operators to set `Realtime__SupabaseUrl` / `Realtime__SupabaseAnonKey`, but `docker-compose.prod.yml` never passed them into the container, so live tracking silently degraded to REST polling in production | Both variables are now passed through to the backend service |
+
+
+### 11.2 Additional hardening (not defects)
+
+* **Container hardening** — the API image now runs as `USER $APP_UID` (uid 1654) instead of root, with `/app/uploads` and `/app/logs` created and chowned up front so Serilog and the local storage provider keep working. `curl` is retained solely for `HEALTHCHECK`.
+* **Health-gated startup** — nginx now waits on `condition: service_healthy` rather than mere start order, and the API declares an explicit healthcheck with a 40 s `start_period` (raised from 5 s to cover first-boot schema creation, which would otherwise trip the probe and cause a restart loop).
+* **Log rotation** — all three services get a `json-file` driver capped at 3 × 10 MB. The `json-file` driver has no default limit, so container logs previously grew unbounded.
+* **Graceful shutdown** — `stop_grace_period: 30s` on postgres and the backend so in-flight uploads and a final DB checkpoint are not cut off.
+* **Memory ceiling** — the backend cap is raised 256 MB → 512 MB, matching postgres; 256 MB left too little headroom for EF Core plus document uploads.
+* **Reproducible DB init** — `POSTGRES_INITDB_ARGS: --encoding=UTF8 --locale=C` so index collation matches CI.
+* **Edge headers** — dropped the obsolete `X-XSS-Protection`, added a CSP tuned to the actual client dependencies (Supabase `wss://`, Google Maps, `blob:` workers), `Permissions-Policy`, `server_tokens off` and `gzip_vary on`. Also `X-Forwarded-Host` / `X-Forwarded-Port` are set by nginx, but note the API only opts into `XForwardedFor | XForwardedProto` (`Program.cs`), so those two are **not** consumed. This is harmless: absolute tracking links are built from the `App:BaseUrl` config value (`EmailNotificationService.cs`), never from `Request.Host`, and there are no `Request.Host` reads in the backend. Enabling `XForwardedHost` would only widen Host-header-spoofing surface, so it is deliberately left off. A dotfile-deny rule stops `.git`/`.env` being served from the SPA root.
+* **CI test env** — `dotnet test` does not set `ASPNETCORE_ENVIRONMENT`, so the host resolves to `Production`; `Email__DevMode: 'false'` is pinned so the new fail-fast cannot make the 105-test suite flaky.
+* **Image release path** — `docker-compose.prod.yml` backend now carries `image: ${SHIPNEX_IMAGE:-shipnex-api:latest}`, so a release deploys the exact sha-tagged image that passed CI instead of rebuilding untested source on the server.
+* **`.gitignore`** — `uploads/` and `ssl/` added. `uploads/` holds customer pet health / veterinary records and `ssl/` holds private keys; neither was ignored.
+
+### 11.3 Verification status
+
+Items 1 and 2 were re-run on **30 Sep 2026** now that command execution works. Items 3–6
+**remain unverified** and are still mandatory before deploying.
+
+| # | Check | Status |
+|---|---|---|
+| 1 | `dotnet build` + `dotnet test` | ✅ **Verified** — see below |
+| 1b | `npm run build` (`tsc -b && vite build`) | ✅ **Verified** — see below |
+| 2 | Production + `Email__DevMode=true` must fail to start | ✅ **Verified** — guard fires |
+| 3 | `docker compose -f docker-compose.prod.yml config` | ⛔ **Open** — `docker` not installed |
+| 4 | `nginx -t` with `nginx.prod.conf` | ⛔ **Open** — `nginx` not installed |
+| 5 | Live 2 MB upload through the proxy | ⛔ **Open** — needs items 3–4 first |
+| 6 | Populate `DEPLOY_*` + `HEALTH_URL` GitHub secrets | ⛔ **Open** — needs repo/environment access |
+
+**Item 1 — build and tests.** `dotnet restore` was initially failing with
+`There is not enough space on the disk`; the build host had ~1.4 GB free on a 29 GB volume.
+After clearing regenerable NuGet/temp caches:
+
+* `dotnet restore` → **exit 0**
+* `dotnet build -c Release` → **exit 0, 0 warnings, 0 errors**, all 6 projects
+* `ShipNex.Application.Tests` → **83/83 passed**
+* `ShipNex.Api.Tests` → **22/22 passed**
+* **105/105 total, 0 failed** — unchanged from the §2 baseline
+
+> **Defect found and fixed during this verification.** The build initially failed with
+> `CS0246: The type or namespace name 'HealthCheckOptions' could not be found`
+> at `Program.cs:358` and `Program.cs:365`. The §11 liveness/readiness split had therefore
+> **never compiled** — the previous pass's "0 open code defects" was based on review, not
+> execution. Root cause: `HealthCheckOptions` lives in
+> `Microsoft.AspNetCore.Diagnostics.HealthChecks`, which was not imported.
+> Fixed by adding that `using` to `Program.cs`. Re-verified green above.
+
+**Item 1b — frontend production build.** `npm run build` initially failed:
+
+```
+[UNRESOLVED_ENTRY] Cannot resolve entry module index.html.
+```
+
+`index.html` had been deleted by an earlier workspace-cleanup pass that classified files
+by name pattern. It is **Vite's required entry module** (`vite.config.ts` sets no custom
+`root`), so `tsc -b` succeeded while `vite build` produced no artifact at all — the site
+could not be built or deployed. Restored with `git checkout -- index.html`; the other
+tracked files removed by the same pass were restored as well. After restoring:
+
+* `tsc -b` → clean
+* `vite build` → **1627 modules transformed, built in 20.22 s**
+* `dist/index.html` 1.94 kB · CSS 46.57 kB (gz 9.23) · JS 723.42 kB (gz 185.45) → **exit 0**
+
+**Repository integrity issue found alongside this.** Several files that the build
+*requires* were present on disk but **untracked**, so a fresh clone could not build:
+
+| Untracked file | Required by |
+|---|---|
+| `src/components/GlobalNetworkMap.tsx` | `src/pages/HomePage.tsx` |
+| `src/components/worldGeometry.ts` | `src/components/GlobalNetworkMap.tsx` |
+| `public/images/*.svg` (3 files) | `HomePage.tsx`, `ServicesPage.tsx` |
+| `public/brand/shipnex-wordmark-light.png` | `Header.tsx`, `Footer.tsx`, `AdminLayout.tsx` |
+
+`brand-source/shipnex-banner-original-2078x757.png` (999 kB) is the only copy of the
+original banner artwork and was likewise untracked. All are now tracked.
+
+**Item 2 — the `Email:DevMode` production guard.** Booted the Release build twice with
+`ASPNETCORE_ENVIRONMENT=Production` (`Database__Provider=InMemory`,
+`Jwt__SecretKey`, `FileStorage__Provider=Local` supplied so the rest of the startup chain
+is satisfied):
+
+* `Email__DevMode=true` → **refused to start**, `InvalidOperationException` at
+  `Program.cs:62` with the intended message. ✅
+* `Email__DevMode=false` → **started and stayed up** (still listening after 20 s). ✅
+
+The second case matters: it proves the guard is the *only* thing blocking the first, rather
+than the process failing for some unrelated missing setting.
+
+**Conclusion:** the two P0 issues from §8 (PostgreSQL schema creation, forwarded headers)
+were already closed in the prior pass. This pass closed the two that would have made
+production non-functional — no email ever sent, and no document over 1 MB ever
+uploadable — plus a deployment script and CI deploy job that could not have deployed
+anything correctly. The pipeline is now coherent end to end. Items 1–2 of §11.3 are
+verified by execution; **items 3–6 are still mandatory before the next release.**
+
+

@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -46,6 +46,22 @@ try
 catch (Exception ex)
 {
     Console.WriteLine($"Warning: Serilog initialization failed: {ex.Message}");
+}
+
+// ---------- Email: production must never run in dev-mode ----------
+// SmtpEmailService/ResendEmailService short-circuit when Email:DevMode is true:
+// the mail is logged as "[DEV MODE]" and a *successful* result is returned, so the
+// notification log is marked Sent while nothing was ever delivered. appsettings.json
+// ships DevMode=true for local work, so any environment that forgets to override it
+// silently loses all customer email. Fail fast instead of shipping that to clients.
+// Only IsProduction() trips this - the integration tests (WebApplicationFactory) run
+// with the Development/Staging defaults and must not be blocked by it.
+if (builder.Environment.IsProduction() &&
+    bool.TryParse(builder.Configuration["Email:DevMode"], out var emailDevMode) && emailDevMode)
+{
+    throw new InvalidOperationException(
+        "Email:DevMode is enabled in Production. Set Email__DevMode=false (see appsettings.Production.json) - " +
+        "otherwise every email is logged instead of sent and notifications are recorded as delivered.");
 }
 
 // ---------- Services ----------
@@ -180,9 +196,25 @@ builder.Services.AddScoped<IAuditService, AuditService>();
 
 // Select file storage provider. Supabase Storage = private bucket with
 // server-minted signed URLs; Local = disk behind the authorized API.
+//
+// SupabaseFileStorageService validates its own configuration, but it is created
+// lazily through AddHttpClient — without the check below a missing key only
+// surfaces on the first document upload as a 500, after the container has already
+// reported healthy. Production defaults to Supabase (docker-compose.prod.yml and
+// appsettings.Production.json), so an unconfigured service key must fail at
+// startup the same way a missing JWT secret does.
 var fileStorageProvider = builder.Configuration["FileStorage:Provider"] ?? "Local";
 if (fileStorageProvider.Equals("Supabase", StringComparison.OrdinalIgnoreCase))
 {
+    if (string.IsNullOrWhiteSpace(builder.Configuration["FileStorage:SupabaseUrl"]) ||
+        string.IsNullOrWhiteSpace(builder.Configuration["FileStorage:SupabaseServiceKey"]))
+    {
+        throw new InvalidOperationException(
+            "FileStorage:Provider is Supabase but FileStorage:SupabaseUrl / FileStorage:SupabaseServiceKey are not configured. " +
+            "Set FileStorage__SupabaseUrl and FileStorage__SupabaseServiceKey (SUPABASE_URL and SUPABASE_SERVICE_KEY in .env), " +
+            "or set FileStorage__Provider=Local to store documents on the uploads volume.");
+    }
+
     builder.Services.AddHttpClient<IFileStorageService, SupabaseFileStorageService>();
 }
 else
@@ -242,16 +274,24 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 // ---------- Apply EF Core migrations (PostgreSQL only) ----------
-// The schema is created from the migrations in ShipNex.Infrastructure/Migrations.
-// Previously nothing ever created the schema, so the API started and then failed
-// on every query with 42P01. This runs before any request is served.
+// Production needs a schema-creation path: previously the API started with an
+// empty database and every query failed with 42P01 (relation does not exist).
+// This runs before any request is served so the readiness probe never reports
+// a reachable database that has no tables.
 //
-// Guarded three ways:
-//   1. Only for a relational provider — the InMemory provider has no schema to
-//      migrate and does not support Migrate().
-//   2. Skipped in Development, where InMemory seeding owns the data.
-//   3. Opt-out via Database:MigrateOnStartup=false, so a deployment that applies
-//      migrations in a release step (dotnet ef database update) stays in control.
+// Two-tier strategy (no new packages required):
+//   1. If real migrations exist (ShipNex.Infrastructure/Migrations), apply them
+//      with Migrate() — the normal upgrade path.
+//   2. If no migrations exist yet (current state — scaffolding requires network
+//      access for the EF tooling), fall back to EnsureCreated(), which builds
+//      the schema directly from the model. Idempotent: a no-op when tables
+//      already exist; Migrate() takes over permanently once migrations land.
+//
+// Guarded two ways:
+//   - Skipped in Development, where InMemory seeding owns the data (the InMemory
+//     provider has no relational schema and does not support Migrate()).
+//   - Opt-out via Database:MigrateOnStartup=false, so a deployment that applies
+//     migrations in a release step (dotnet ef database update) stays in control.
 if (dbProvider.Equals("PostgreSQL", StringComparison.OrdinalIgnoreCase) &&
     !string.Equals(app.Configuration["Database:MigrateOnStartup"], "false", StringComparison.OrdinalIgnoreCase))
 {
@@ -259,15 +299,23 @@ if (dbProvider.Equals("PostgreSQL", StringComparison.OrdinalIgnoreCase) &&
     {
         using var scope = app.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<ShipNexDbContext>();
-        db.Database.Migrate();
-        Log.Information("EF Core migrations applied.");
+        if (db.Database.GetMigrations().Any())
+        {
+            db.Database.Migrate();
+            Log.Information("EF Core migrations applied.");
+        }
+        else
+        {
+            db.Database.EnsureCreated();
+            Log.Information("No EF Core migrations found; database schema created via EnsureCreated.");
+        }
     }
     catch (Exception ex)
     {
         // Fail loudly: starting without a schema only defers the crash to the
         // first request. The readiness probe would otherwise report a database
         // that is reachable but has no tables.
-        Log.Fatal(ex, "Failed to apply EF Core migrations. The API will not start.");
+        Log.Fatal(ex, "Failed to prepare the database schema. The API will not start.");
         throw;
     }
 }
