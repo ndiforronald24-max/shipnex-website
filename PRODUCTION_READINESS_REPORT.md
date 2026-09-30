@@ -422,7 +422,43 @@ After clearing regenerable NuGet/temp caches:
 > is not set), but the earlier "0 warnings" figure was an artifact of incremental
 > compilation and should not be relied on.
 
-> **Defect found and fixed during this verification.** The build initially failed with
+* `dotnet restore` → **exit 0**
+* `dotnet build -c Release` → **exit 0, 0 errors**, all 6 projects
+* `ShipNex.Application.Tests` → **92/92 passed** (83 pre-existing + 9 new regression tests)
+* `ShipNex.Api.Tests` → **22/22 passed**
+* **114/114 total, 0 failed**
+
+> **Severity correction — the optional-field bug was worse than "writes a null".**
+> `Phone` is optional on the request DTOs (`string?`, no `[Required]`) but required on
+> the `User` / `Customer` / `ShipmentDocument` entities. Reverting the fix and running the
+> new tests produced:
+>
+> ```
+> DbUpdateException : Required properties '{'Phone'}' are missing
+>                     for the instance of entity type 'User'.
+>    at AuthService.RegisterAsync(...) AuthService.cs:line 64
+> ```
+>
+> So the request did not store a null — it **failed outright**. `POST /api/auth/register`
+> is `[AllowAnonymous]`, meaning any customer who left the optional phone field blank hit
+> a server error. `CustomerService.CreateAsync` / `UpdateAsync` and
+> `PetShipmentService.AddDocumentAsync` (`FileUrl`) failed the same way. This is the most
+> user-visible defect found in this pass, and it is now pinned by four tests.
+>
+> **Mutation-tested.** Reverting `4b94f83` and rebuilding makes 5 of the 9 new tests
+> fail; restoring it makes them pass. The other 4 pass either way and are labelled as
+> documenting behaviour rather than proving a fix — see the caveat below.
+>
+> **Correction to an earlier claim in this report's history.** The `l.Subject!`
+> null-forgiving operator in the notification search was originally described here as a
+> live `NullReferenceException` that 500'd the admin endpoint. Mutation testing shows it
+> does **not** throw: EF Core's InMemory provider applies SQL null semantics
+> (`LOWER(NULL)` → `NULL`), and against Npgsql the expression likewise compiles to SQL
+> `LOWER()`, which returns `NULL` rather than throwing. The null guards are still correct
+> and clearer, but no production crash was demonstrated, and the tests covering them are
+> marked as behaviour documentation only.
+
+> **Correction — the build is not warning-free.** An earlier incremental build reported
 > `CS0246: The type or namespace name 'HealthCheckOptions' could not be found`
 > at `Program.cs:358` and `Program.cs:365`. The §11 liveness/readiness split had therefore
 > **never compiled** — the previous pass's "0 open code defects" was based on review, not
