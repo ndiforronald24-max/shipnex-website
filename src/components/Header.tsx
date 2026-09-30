@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Package, ChevronDown, Phone } from 'lucide-react';
+import { Menu, X, ChevronDown, Phone } from 'lucide-react';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -27,6 +27,8 @@ export default function Header() {
     { path: '/services/express-shipping', label: 'Express Shipping' },
     { path: '/services/vehicle-shipping', label: 'Vehicle Shipping' },
     { path: '/services/pet-live-animal', label: 'Pet & Live Animal' },
+    { path: '/services#warehousing', label: 'Warehousing' },
+    { path: '/services#customs-support', label: 'Customs Support' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -76,14 +78,14 @@ export default function Header() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center gap-2.5 group" aria-label="ShipNex Home">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#ff6f00] to-[#ff8f00] rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-orange-500/25 transition-shadow">
-              <Package className="w-5 h-5 text-white" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-bold tracking-tight text-white leading-tight">ShipNex</span>
-              <span className="text-[10px] text-white/50 font-medium tracking-widest uppercase leading-tight">Global Logistics</span>
-            </div>
+          <Link to="/" className="flex items-center group shrink-0" aria-label="ShipNex — home">
+            <img
+              src="/brand/shipnex-wordmark-light.png"
+              alt="ShipNex"
+              width={720}
+              height={147}
+              className="h-8 sm:h-9 lg:h-10 w-auto object-contain"
+            />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">

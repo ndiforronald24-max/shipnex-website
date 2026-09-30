@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Package, Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin } from 'lucide-react';
 
 export default function Footer() {
   const services = [
@@ -9,6 +9,8 @@ export default function Footer() {
     { path: '/services/express-shipping', label: 'Express Shipping' },
     { path: '/services/vehicle-shipping', label: 'Vehicle Shipping' },
     { path: '/services/pet-live-animal', label: 'Pet Transport' },
+    { path: '/services#warehousing', label: 'Warehousing' },
+    { path: '/services#customs-support', label: 'Customs Support' },
   ];
 
   const quickLinks = [
@@ -32,14 +34,14 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           <div>
-            <Link to="/" className="flex items-center gap-2.5 mb-5 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#ff6f00] to-[#ff8f00] rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-orange-500/25 transition-shadow">
-                <Package className="w-5 h-5 text-white" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-bold tracking-tight text-white leading-tight">ShipNex</span>
-                <span className="text-[10px] text-white/40 font-medium tracking-widest uppercase leading-tight">Global Logistics</span>
-              </div>
+            <Link to="/" className="inline-block mb-5 group">
+              <img
+                src="/brand/shipnex-wordmark-light.png"
+                alt="ShipNex"
+                width={720}
+                height={147}
+                className="h-10 w-auto object-contain"
+              />
             </Link>
             <p className="text-sm text-gray-300 leading-relaxed mb-5">Your trusted partner for fast reliable shipping and logistics solutions worldwide. Connecting the world moving what matters.</p>
             <div className="flex items-center gap-2 text-sm text-gray-300">

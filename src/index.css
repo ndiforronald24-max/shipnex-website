@@ -83,6 +83,36 @@ html {
   animation: pulse-slow 3s ease-in-out infinite;
 }
 
+/* --- Global network map (home page) ------------------------------------ */
+/* Marching dashes along the air lanes to suggest live traffic. */
+@keyframes laneFlow {
+  to { stroke-dashoffset: -38; }
+}
+
+.gnm-lane-flow {
+  animation: laneFlow 2.4s linear infinite;
+}
+
+/* Slow halo pulse on primary hubs. */
+@keyframes hubPing {
+  0%   { transform: scale(0.6); opacity: 0.55; }
+  70%  { transform: scale(1.9); opacity: 0; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+.gnm-hub-ping {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hubPing 3.2s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gnm-lane-flow,
+  .gnm-hub-ping {
+    animation: none;
+  }
+}
+
 /* Animation delays */
 .delay-100 { animation-delay: 0.1s; }
 .delay-200 { animation-delay: 0.2s; }

@@ -91,12 +91,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       <aside className={`fixed lg:sticky top-0 h-screen w-72 lg:w-64 bg-[#1a237e] text-white flex flex-col z-50 transition-transform duration-300 ${mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         {/* Logo */}
         <div className="flex items-center justify-between px-5 h-16 border-b border-white/10 flex-shrink-0">
-          <Link to="/admin" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-gradient-to-br from-[#ff6f00] to-[#ff8f00] rounded-lg flex items-center justify-center font-bold text-sm">S</div>
-            <div>
-              <span className="font-bold tracking-tight leading-none">ShipNex</span>
-              <p className="text-[10px] text-white/50 leading-none mt-0.5">Admin Portal</p>
-            </div>
+          <Link to="/admin" className="min-w-0">
+            <img
+              src="/brand/shipnex-wordmark-light.png"
+              alt="ShipNex"
+              width={720}
+              height={147}
+              className="h-7 w-auto object-contain"
+            />
+            <p className="text-[10px] text-white/50 leading-none mt-1">Admin Portal</p>
           </Link>
           <button onClick={() => setMobileOpen(false)} className="lg:hidden p-1.5 rounded-lg hover:bg-white/10">
             <X className="w-5 h-5" />

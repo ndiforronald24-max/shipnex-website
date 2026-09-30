@@ -24,9 +24,20 @@ RUN dotnet publish "ShipNex.Api.csproj" -c Release -o /app/publish /p:UseAppHost
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-RUN mkdir -p /app/uploads
+# curl is required by the HEALTHCHECK below; the stock aspnet image does not ship it.
+RUN apt-get update && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
+# Serilog writes logs/shipnex-*.log and the Local file-storage provider writes /app/uploads.
+# Both directories are created up front and chowned to the unprivileged user so the
+# process never needs root, and so a mounted volume inherits the right ownership.
+RUN mkdir -p /app/uploads /app/logs \
+    && chown -R app:app /app
 ENV ASPNETCORE_URLS=http://+:80
 ENV ASPNETCORE_ENVIRONMENT=Production
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+# $APP_UID ships with the .NET 8 aspnet images (uid 1654) and is created by the
+# `app` user in the base image. Running as root would let a container escape
+# become a host-root escape if the runtime were ever compromised.
+USER $APP_UID
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:80/health || exit 1
 ENTRYPOINT ["dotnet", "ShipNex.Api.dll"]

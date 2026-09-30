@@ -15,8 +15,21 @@ exit /b %ERRORLEVEL%
 
 :main
 cd /d "%~dp0backend"
+echo === Restore ===
+REM Explicit restore step: the local NuGet cache was emptied, so packages must
+REM be fetched before building. Keeping it separate means a network failure is
+REM reported here instead of surfacing as MSB3106/CS0006 "metadata file could
+REM not be found" during compilation.
+REM NuGet's HTTP/2 stack stalls on this network ("no data received for 60000ms"
+REM while curl fetches the same v3-flatcontainer URL fine), so force HTTP/1.1
+REM and serialise requests. --disable-parallel avoids one stalled stream
+REM blocking the whole restore.
+set DOTNET_SYSTEM_NET_HTTP_SOCKETSHTTPHANDLER_HTTP2SUPPORT=0
+set DOTNET_SYSTEM_NET_HTTP_SOCKETSHTTPHANDLER_HTTP2FLOWCONTROL_DISABLED=1
+dotnet restore ShipNex.sln --disable-parallel || exit /b 1
 echo === Build ===
-dotnet build ShipNex.sln -c Release || exit /b 1
+REM Build never re-restores, so a slow/unreachable feed cannot stall compilation.
+dotnet build ShipNex.sln -c Release --no-restore || exit /b 1
 echo === Application tests ===
 dotnet test tests\ShipNex.Application.Tests\ShipNex.Application.Tests.csproj -c Release --no-build || exit /b 1
 echo === API tests ===

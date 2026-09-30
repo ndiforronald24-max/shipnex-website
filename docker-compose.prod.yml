@@ -1,5 +1,14 @@
 version: '3.8'
 
+# Container logs are written to the json-file driver by default with no rotation,
+# which silently fills the host disk on a long-running deployment. Cap every
+# service at 3 x 10 MB instead of allowing unbounded growth.
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
   # PostgreSQL Database
   postgres:
@@ -8,7 +17,10 @@ services:
     environment:
       POSTGRES_DB: shipnex
       POSTGRES_USER: shipnex
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required - set it in .env or the environment}
+      # Keep initdb deterministic across host locales; a different collation order
+      # would make index behaviour differ from the CI database.
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     expose:
@@ -18,7 +30,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    # Fast, clean shutdown so postgres can finish a checkpoint and the volume
+    # stays crash-consistent for the next boot.
+    stop_grace_period: 30s
     restart: always
+    logging: *default-logging
     networks:
       - shipnex-network
     deploy:
@@ -31,23 +47,52 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    # Normally the image is built locally by `deploy.sh`. CI publishes a sha-tagged
+    # image to ghcr.io and passes SHIPNEX_IMAGE, so a release deploy pulls the exact
+    # artifact that passed CI instead of rebuilding untested source on the server.
+    image: ${SHIPNEX_IMAGE:-shipnex-api:latest}
     container_name: shipnex-backend
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
       - Database__Provider=PostgreSQL
-      - Database__ConnectionString=Host=postgres;Port=5432;Database=shipnex;Username=shipnex;Password=${DB_PASSWORD}
-      - Jwt__SecretKey=${JWT_SECRET}
+      - Database__ConnectionString=Host=postgres;Port=5432;Database=shipnex;Username=shipnex;Password=${DB_PASSWORD:?DB_PASSWORD is required - set it in .env or the environment}
+      - Jwt__SecretKey=${JWT_SECRET:?JWT_SECRET is required - set it in .env or the environment}
       - Jwt__Issuer=ShipNex
       - Jwt__Audience=ShipNexApp
-      - Email__SmtpHost=${SMTP_HOST}
+      - Email__SmtpHost=${SMTP_HOST:-}
       - Email__SmtpPort=${SMTP_PORT:-587}
-      - Email__Username=${SMTP_USERNAME}
-      - Email__Password=${SMTP_PASSWORD}
-      - Email__FromAddress=noreply@shipnex.com
+      - Email__Username=${SMTP_USERNAME:-}
+      - Email__Password=${SMTP_PASSWORD:-}
+      - Email__FromAddress=${EMAIL_FROM_ADDRESS:-no-reply@shipnex.com}
       - Email__FromName=ShipNex Logistics
-      - FileStorage__Provider=Local
+      # Hard-pinned: the mail services short-circuit and return a fake success when
+      # DevMode is true, so leaving it unset (appsettings.json defaults it to true)
+      # would mark notifications "Sent" without ever delivering a single email.
+      - Email__DevMode=false
+      # Supabase Storage is the production default: uploaded documents (pet health
+      # and veterinary records) then live in a private bucket that survives
+      # container replacement, image rebuilds and horizontal scaling, whereas the
+      # uploads_data volume only survives a restart of this same container.
+      # Set FILE_STORAGE_PROVIDER=Local to fall back to the uploads_data volume
+      # below; the SUPABASE_* values are then ignored. When Supabase is selected
+      # the API refuses to start if either value is empty rather than failing on
+      # the first document upload.
+      - FileStorage__Provider=${FILE_STORAGE_PROVIDER:-Supabase}
+      - FileStorage__SupabaseUrl=${SUPABASE_URL:-}
+      - FileStorage__SupabaseServiceKey=${SUPABASE_SERVICE_KEY:-}
+      - FileStorage__SupabaseBucket=${SUPABASE_BUCKET:-shipment-documents}
       - FileStorage__LocalPath=/app/uploads
+      # Server-side Realtime publisher for live tracking. These were documented in
+      # .env.example/docs but never actually passed into the container, so the
+      # publisher stayed disabled in production and tracking silently fell back to
+      # REST polling. Blank values simply disable the publisher.
+      - Realtime__SupabaseUrl=${REALTIME_SUPABASE_URL:-}
+      - Realtime__SupabaseAnonKey=${REALTIME_SUPABASE_ANON_KEY:-}
+      # Trust the compose network so X-Forwarded-For/Proto from nginx is honoured.
+      # Without this, Program.cs ignores the headers and every request appears to
+      # come from the proxy IP (shared rate-limit bucket, wrong audit IPs).
+      - Proxy__KnownNetworks=${PROXY_KNOWN_NETWORKS:-172.16.0.0/12}
     volumes:
       - uploads_data:/app/uploads
       - logs_data:/app/logs
@@ -56,13 +101,26 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    # Let in-flight requests (uploads, tracking) finish before SIGKILL.
+    stop_grace_period: 30s
+    # The image already declares a HEALTHCHECK, but declaring it here as well keeps
+    # the probe visible in the compose file and lets nginx gate on it.
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:80/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
     restart: always
+    logging: *default-logging
     networks:
       - shipnex-network
     deploy:
       resources:
         limits:
-          memory: 256M
+          # 256 MB was not enough headroom for the API + EF Core + document uploads;
+          # 512 MB matches the database budget and still fails fast on a leak.
+          memory: 512M
 
   # Nginx Reverse Proxy with HTTPS
   nginx:
@@ -76,8 +134,10 @@ services:
       - ./ssl:/etc/nginx/ssl:ro
       - ./dist:/usr/share/nginx/html:ro
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     restart: always
+    logging: *default-logging
     networks:
       - shipnex-network
 

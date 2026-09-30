@@ -54,6 +54,10 @@ jobs:
           Database__Provider: PostgreSQL
           Database__ConnectionString: Host=localhost;Port=5432;Database=shipnex_test;Username=postgres;Password=postgres
           Jwt__SecretKey: Test_SecretKey_For_CI_2026_ABCDEFGHIJKLMNOPQRSTUVWXYZ
+          # `dotnet test` does not set ASPNETCORE_ENVIRONMENT, so the host resolves
+          # to Production. Program.cs refuses to start in Production while this flag
+          # is true, so pin it explicitly rather than relying on the test content root.
+          Email__DevMode: 'false'
 
   # Frontend Build and Test
   frontend:
@@ -142,15 +146,54 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy to production
+      # GitHub cannot reach a self-hosted VPS, so the deploy is driven from here
+      # over SSH and reuses deploy.sh on the server. `docker compose up -d` is a
+      # rolling-style restart: the image tag is already published by the docker job.
+      - name: Deploy over SSH
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
         run: |
-          echo "Deploying to production..."
-          # Add your deployment commands here
-          # Example: SSH to server and pull new image
-          # ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /opt/shipnex && docker-compose pull && docker-compose up -d"
-          
-      - name: Verify deployment
+          set -euo pipefail
+          for v in DEPLOY_HOST DEPLOY_USER DEPLOY_SSH_KEY DEPLOY_PATH; do
+            if [ -z "${!v}" ]; then
+              echo "::error::Secret $v is not configured for the production environment."
+              exit 1
+            fi
+          done
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          # Pin the host key so a MITM cannot silently capture the deploy key.
+          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            "cd '$DEPLOY_PATH' && git fetch --all --tags && git checkout '${{ github.sha }}' && SHIPNEX_IMAGE='$IMAGE' ./deploy.sh"
+          rm -f ~/.ssh/deploy_key
+
+      # A successful `docker compose up` only proves the containers started. Gate
+      # the release on the public readiness endpoint, which includes the database
+      # probe, so a half-working deploy is caught here instead of by a customer.
+      - name: Verify deployment (readiness)
+        env:
+          HEALTH_URL: ${{ vars.HEALTH_URL || secrets.HEALTH_URL }}
         run: |
-          echo "Verifying deployment..."
-          # Add health check verification
-          # curl -f https://yourdomain.com/health || exit 1
+          set -euo pipefail
+          if [ -z "${HEALTH_URL:-}" ]; then
+            echo "::notice::No HEALTH_URL configured; skipping the post-deploy probe."
+            exit 0
+          fi
+          for i in $(seq 1 30); do
+            status=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$HEALTH_URL/health/ready" || echo 000)
+            if [ "$status" = "200" ]; then
+              echo "Readiness OK after ${i} attempt(s)."
+              exit 0
+            fi
+            echo "Attempt $i: /health/ready returned $status - retrying in 5s"
+            sleep 5
+          done
+          echo "::error::Deployment did not become ready at $HEALTH_URL/health/ready"
+          exit 1

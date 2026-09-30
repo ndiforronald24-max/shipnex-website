@@ -62,6 +62,31 @@ FileStorage__SupabaseServiceKey=<service_role key>
 FileStorage__SupabaseBucket=shipment-documents
 ```
 
+### 3.1 Production default
+
+`docker-compose.prod.yml` already selects this provider:
+
+```
+FileStorage__Provider=${FILE_STORAGE_PROVIDER:-Supabase}
+FileStorage__SupabaseUrl=${SUPABASE_URL:-}
+FileStorage__SupabaseServiceKey=${SUPABASE_SERVICE_KEY:-}
+FileStorage__SupabaseBucket=${SUPABASE_BUCKET:-shipment-documents}
+```
+
+Set `FILE_STORAGE_PROVIDER=Local` to fall back to the `uploads_data` volume —
+useful only for a single-replica deployment that cannot reach Supabase.
+
+If Supabase is selected and either value is empty, `Program.cs` throws during
+startup. The service's own constructor check would otherwise run only when the
+first document request resolves `IFileStorageService`, turning a missing secret
+into a 500 on an already-"healthy" container instead of a failed boot.
+
+**Existing documents:** object keys are looked up by `fileId` and both providers
+store the file under `/api/documents/download/{fileId}`, so switching providers
+does not require a data migration *as long as no files were uploaded to the
+local volume*. Files already on `uploads_data` are not copied — re-upload them
+or copy the volume into the bucket first.
+
 ## 4. How access control works
 
 | Action | Who | Mechanism |

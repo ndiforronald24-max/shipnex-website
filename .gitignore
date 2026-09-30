@@ -52,6 +52,12 @@ coverage/
 _*.txt
 _vercel/
 
+# Uploaded customer documents (pet health / veterinary records, invoices,
+# customs paperwork) and TLS material are runtime data, never source.
+# `logs` is already covered at the top of this file.
+uploads/
+ssl/
+
 # Transient agent/session scratch output (dumps, probes, status flags)
 *.status
 *.tmp
@@ -88,6 +94,16 @@ final-check.ps1
 # Not referenced by backend/ShipNex.sln and not built - safe to delete on disk.
 backend/src/ShipNex/
 backend/tests/ShipNex/
+
+# Test artefacts written next to the test projects
+backend/**/results/
+backend/**/test-results/
+backend/**/TestResults/
+
+# NuGet local folder feeds (packages are not committed; restore from nuget.org)
+backend/nupkgs/
+*.nupkg
+.nuget/
 
 # Throwaway static prototypes
 dev_admin.html
