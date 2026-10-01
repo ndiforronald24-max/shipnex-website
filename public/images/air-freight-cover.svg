@@ -1,0 +1,293 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="afc-title afc-desc" preserveAspectRatio="xMidYMid slice">
+  <title id="afc-title">Air freight: cargo aircraft loading at dusk</title>
+  <desc id="afc-desc">A wide-body freighter stands with its nose hold open at golden hour while a high-reach loader and ground crew move palletised freight across the apron.</desc>
+  <defs>
+    <linearGradient id="cSky" x1="0" y1="0" x2="0.08" y2="1">
+      <stop offset="0" stop-color="#0c142c"/>
+      <stop offset="0.22" stop-color="#1a2748"/>
+      <stop offset="0.44" stop-color="#4a4a6a"/>
+      <stop offset="0.64" stop-color="#9a5f40"/>
+      <stop offset="0.83" stop-color="#dd8438"/>
+      <stop offset="1" stop-color="#f7bd6a"/>
+    </linearGradient>
+    <radialGradient id="cSun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff1c8" stop-opacity="0.9"/>
+      <stop offset="0.34" stop-color="#ffb257" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#ff8a3c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cTarmac" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#59607a"/>
+      <stop offset="0.18" stop-color="#3b4257"/>
+      <stop offset="1" stop-color="#1a1f2e"/>
+    </linearGradient>
+    <linearGradient id="cFuse" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.4" stop-color="#eff3f9"/>
+      <stop offset="0.72" stop-color="#c6d0de"/>
+      <stop offset="1" stop-color="#8d9aae"/>
+    </linearGradient>
+    <linearGradient id="cWing" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0" stop-color="#e8edf5"/>
+      <stop offset="1" stop-color="#93a1b6"/>
+    </linearGradient>
+    <linearGradient id="cHold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#232c3f"/>
+      <stop offset="1" stop-color="#0b1120"/>
+    </linearGradient>
+    <linearGradient id="cBox" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#d9a367"/>
+      <stop offset="1" stop-color="#a6712e"/>
+    </linearGradient>
+    <linearGradient id="cBoxTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eab87f"/>
+      <stop offset="1" stop-color="#c08a45"/>
+    </linearGradient>
+    <linearGradient id="cContainer" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#3378b2"/>
+      <stop offset="1" stop-color="#15436b"/>
+    </linearGradient>
+    <linearGradient id="cSteel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0f3f8"/>
+      <stop offset="1" stop-color="#98a5b8"/>
+    </linearGradient>
+    <radialGradient id="cLamp" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff5d6" stop-opacity="0.85"/>
+      <stop offset="0.38" stop-color="#ffd79a" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#ffcf8a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cBloom" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffd49b" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#ffd49b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cVig" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#080d20" stop-opacity="0.5"/>
+      <stop offset="0.42" stop-color="#080d20" stop-opacity="0"/>
+      <stop offset="1" stop-color="#080d20" stop-opacity="0.62"/>
+    </linearGradient>
+    <g id="cCarton">
+      <rect x="0" y="0" width="62" height="50" rx="2" fill="url(#cBox)"/>
+      <rect x="0" y="0" width="62" height="12" fill="url(#cBoxTop)"/>
+      <rect x="27" y="0" width="8" height="50" fill="#8d5c25" opacity="0.45"/>
+      <rect x="6" y="20" width="19" height="13" rx="1" fill="#f4e9d6" opacity="0.9"/>
+    </g>
+    <g id="cPallet">
+      <rect x="-5" y="0" width="192" height="9" fill="#7c5530"/>
+      <rect x="-5" y="9" width="192" height="7" fill="#a97a45"/>
+      <rect x="8" y="0" width="18" height="16" fill="#6f4b2a"/>
+      <rect x="85" y="0" width="18" height="16" fill="#6f4b2a"/>
+      <rect x="162" y="0" width="18" height="16" fill="#6f4b2a"/>
+    </g>
+  </defs>
+
+  <!-- Dusk sky -->
+  <rect width="1600" height="612" fill="url(#cSky)"/>
+  <ellipse cx="290" cy="520" rx="640" ry="320" fill="url(#cSun)"/>
+  <ellipse cx="1230" cy="470" rx="400" ry="210" fill="url(#cSun)" opacity="0.32"/>
+
+  <!-- Cloud deck -->
+  <g>
+    <path d="M-40 128 C120 62 250 154 420 132 C600 108 700 44 900 82 C1100 120 1290 96 1640 62 L1640 -20 L-40 -20 Z" fill="#131b30" opacity="0.92"/>
+    <path d="M-40 218 C180 176 300 244 520 220 C740 196 880 146 1080 178 C1280 210 1430 192 1640 164 L1640 118 L-40 150 Z" fill="#242c48" opacity="0.7"/>
+    <path d="M-40 300 C200 276 380 322 620 300 C860 278 1020 246 1240 268 C1400 284 1520 276 1640 258 L1640 224 L-40 250 Z" fill="#33324c" opacity="0.45"/>
+  </g>
+  <g fill="#f0a765" opacity="0.3">
+    <ellipse cx="250" cy="214" rx="230" ry="11"/>
+    <ellipse cx="720" cy="188" rx="190" ry="9"/>
+    <ellipse cx="1190" cy="208" rx="250" ry="10"/>
+  </g>
+  <!-- Terminal buildings -->
+  <g fill="#101c3c" opacity="0.9">
+    <rect x="0" y="392" width="300" height="128"/>
+    <rect x="300" y="416" width="150" height="104"/>
+    <rect x="1240" y="404" width="360" height="116"/>
+    <rect x="470" y="440" width="46" height="80"/>
+    <rect x="540" y="452" width="34" height="68"/>
+  </g>
+  <g fill="#ffd9a0" opacity="0.6">
+    <rect x="24" y="428" width="12" height="9"/><rect x="70" y="428" width="12" height="9"/><rect x="116" y="428" width="12" height="9"/>
+    <rect x="162" y="428" width="12" height="9"/><rect x="208" y="428" width="12" height="9"/><rect x="254" y="428" width="12" height="9"/>
+    <rect x="1284" y="440" width="12" height="9"/><rect x="1330" y="440" width="12" height="9"/><rect x="1376" y="440" width="12" height="9"/>
+    <rect x="1422" y="440" width="12" height="9"/><rect x="1468" y="440" width="12" height="9"/><rect x="1514" y="440" width="12" height="9"/>
+  </g>
+  <g>
+    <rect x="392" y="300" width="7" height="230" fill="#16224a"/>
+    <rect x="380" y="292" width="31" height="9" rx="3" fill="#1d2c58"/>
+    <circle cx="396" cy="292" r="46" fill="url(#cLamp)"/>
+    <rect x="1090" y="288" width="7" height="242" fill="#16224a"/>
+    <rect x="1078" y="280" width="31" height="9" rx="3" fill="#1d2c58"/>
+    <circle cx="1094" cy="280" r="46" fill="url(#cLamp)"/>
+  </g>
+
+  <!-- Apron -->
+  <rect y="512" width="1600" height="388" fill="url(#cTarmac)"/>
+  <g fill="#ff6f00" opacity="0.6">
+    <rect x="0" y="560" width="300" height="7" rx="3.5"/>
+    <rect x="1180" y="576" width="420" height="7" rx="3.5"/>
+  </g>
+  <g fill="#ffffff" opacity="0.14">
+    <rect x="330" y="592" width="300" height="4" rx="2"/>
+    <rect x="900" y="628" width="260" height="4" rx="2"/>
+  </g>
+
+  <!-- Freighter: tail and rear fuselage -->
+  <path d="M470 400 L392 236 L312 246 L368 414 Z" fill="url(#cWing)"/>
+  <path d="M392 236 L312 246 L306 268 L388 258 Z" fill="#1a237e"/>
+  <path d="M180 430 C180 386 240 362 320 360 L520 356 L520 486 L300 492 C222 494 180 470 180 430 Z" fill="url(#cFuse)"/>
+  <path d="M210 470 L520 456 L520 480 L212 494 Z" fill="#1a237e" opacity="0.9"/>
+  <g fill="#2b4a7d" opacity="0.5">
+    <rect x="236" y="404" width="9" height="8" rx="3"/><rect x="268" y="403" width="9" height="8" rx="3"/>
+    <rect x="300" y="402" width="9" height="8" rx="3"/><rect x="332" y="401" width="9" height="8" rx="3"/>
+  </g>
+  <!-- Wing and engine (left side) -->
+  <path d="M500 470 L196 596 L150 566 L420 448 Z" fill="url(#cWing)"/>
+  <path d="M498 474 L200 592 L196 582 L496 464 Z" fill="#ffffff" opacity="0.35"/>
+  <g transform="translate(300 528) rotate(20)">
+    <rect x="-16" y="-38" width="28" height="24" rx="5" fill="#a9b6cb"/>
+    <rect x="-70" y="-16" width="140" height="44" rx="22" fill="#eef2f8"/>
+    <rect x="46" y="-16" width="26" height="44" rx="12" fill="#8b99b1"/>
+    <circle cx="60" cy="6" r="10" fill="#5c6b83"/>
+  </g>
+  <!-- Main gear -->
+  <g fill="#16223a">
+    <rect x="392" y="486" width="10" height="40"/><rect x="374" y="522" width="46" height="12" rx="6"/>
+    <rect x="470" y="484" width="10" height="40"/><rect x="452" y="520" width="46" height="12" rx="6"/>
+  </g>
+  <!-- Forward fuselage with the nose hold raised -->
+  <path d="M500 352 L1010 342 C1120 340 1216 366 1252 410 C1262 422 1256 434 1234 438 L1010 486 L500 486 Z" fill="url(#cFuse)"/>
+  <path d="M1216 372 C1248 388 1262 406 1258 420 C1252 432 1238 438 1222 440 C1234 418 1234 392 1216 372 Z" fill="#2b4a7d"/>
+  <!-- Cockpit glazing -->
+  <g fill="#1b2c4d">
+    <path d="M1104 358 L1150 362 L1150 380 L1104 376 Z"/>
+    <path d="M1158 363 L1194 370 L1194 386 L1158 381 Z"/>
+  </g>
+  <!-- Livery stripe -->
+  <path d="M520 452 L1240 408 L1242 434 L522 480 Z" fill="#1a237e"/>
+  <path d="M520 452 L1240 408 L1240.5 413 L520 457 Z" fill="#ff6f00"/>
+  <!-- Open nose door, hinged up and forward -->
+  <path d="M812 340 L1012 332 L1052 258 L860 268 Z" fill="url(#cWing)"/>
+  <path d="M860 268 L1052 258 L1049 274 L863 284 Z" fill="#ff6f00"/>
+  <!-- Hold interior with palletised freight -->
+  <path d="M800 344 L1024 336 L1028 442 L804 450 Z" fill="url(#cHold)"/>
+  <g transform="translate(822 372)">
+    <use href="#cCarton" x="0" y="0"/>
+    <use href="#cCarton" x="66" y="-4"/>
+    <use href="#cCarton" x="132" y="2"/>
+    <use href="#cCarton" x="0" y="-52"/>
+    <use href="#cCarton" x="66" y="-56"/>
+  </g>
+  <rect x="836" y="424" width="180" height="9" rx="3" fill="#5b6a80"/>
+  <!-- Nose gear -->
+  <g fill="#16223a">
+    <rect x="1096" y="436" width="9" height="46"/><rect x="1078" y="478" width="42" height="11" rx="5"/>
+  </g>
+
+  <!-- High-reach loader with pallet on the belt -->
+  <g>
+    <rect x="636" y="470" width="300" height="18" rx="6" fill="#c3ccdb"/>
+    <rect x="642" y="474" width="288" height="8" rx="4" fill="#8d9ab0"/>
+    <g transform="translate(700 428) scale(0.92)">
+      <use href="#cCarton" x="0" y="0"/>
+      <use href="#cCarton" x="66" y="-3"/>
+    </g>
+    <rect x="640" y="500" width="46" height="150" rx="8" fill="#ff8f00"/>
+    <rect x="652" y="512" width="22" height="126" rx="6" fill="#e65100"/>
+    <path d="M700 512 L902 640 L700 640 Z" fill="#0f1a30" opacity="0.35"/>
+    <path d="M900 640 L760 512 L700 640 Z" fill="#0f1a30" opacity="0.25"/>
+    <rect x="612" y="650" width="352" height="30" rx="10" fill="#e6ebf3"/>
+    <rect x="612" y="650" width="352" height="12" rx="6" fill="#ff6f00"/>
+    <circle cx="672" cy="688" r="22" fill="#16223a"/><circle cx="672" cy="688" r="9" fill="#7c8ba3"/>
+    <circle cx="906" cy="688" r="22" fill="#16223a"/><circle cx="906" cy="688" r="9" fill="#7c8ba3"/>
+  </g>
+
+  <!-- Ground crew marshalling -->
+  <g>
+    <circle cx="546" cy="536" r="11" fill="#f0c9a0"/>
+    <path d="M534 528 a12 12 0 0 1 24 0 z" fill="#ff6f00"/>
+    <rect x="536" y="548" width="20" height="34" rx="8" fill="#ff8f00"/>
+    <rect x="536" y="552" width="20" height="7" fill="#e8edf5" opacity="0.85"/>
+    <rect x="540" y="580" width="6" height="26" fill="#22304c"/>
+    <rect x="548" y="580" width="6" height="26" fill="#22304c"/>
+  </g>
+  <!-- Foreground: container stacks -->
+  <g>
+    <rect x="-20" y="612" width="230" height="130" rx="6" fill="url(#cContainer)"/>
+    <rect x="-20" y="612" width="230" height="18" rx="6" fill="#1a237e"/>
+    <g fill="#0e3358" opacity="0.55">
+      <rect x="16" y="644" width="10" height="84"/><rect x="52" y="644" width="10" height="84"/>
+      <rect x="88" y="644" width="10" height="84"/><rect x="124" y="644" width="10" height="84"/>
+      <rect x="160" y="644" width="10" height="84"/><rect x="196" y="644" width="10" height="84"/>
+    </g>
+    <rect x="-20" y="742" width="230" height="26" rx="6" fill="#123a63"/>
+    <rect x="-20" y="768" width="230" height="120" rx="6" fill="url(#cContainer)" opacity="0.92"/>
+    <g fill="#0e3358" opacity="0.45">
+      <rect x="16" y="790" width="10" height="84"/><rect x="52" y="790" width="10" height="84"/>
+      <rect x="88" y="790" width="10" height="84"/><rect x="124" y="790" width="10" height="84"/>
+      <rect x="160" y="790" width="10" height="84"/><rect x="196" y="790" width="10" height="84"/>
+    </g>
+    <rect x="1392" y="640" width="240" height="248" rx="6" fill="url(#cSteel)"/>
+    <rect x="1392" y="640" width="240" height="20" rx="6" fill="#c8d0dc"/>
+    <g fill="#8d9ab0" opacity="0.5">
+      <rect x="1420" y="676" width="10" height="196"/><rect x="1456" y="676" width="10" height="196"/>
+      <rect x="1492" y="676" width="10" height="196"/><rect x="1528" y="676" width="10" height="196"/>
+      <rect x="1564" y="676" width="10" height="196"/><rect x="1600" y="676" width="10" height="196"/>
+    </g>
+  </g>
+
+  <!-- Palletised freight, left -->
+  <g transform="translate(300 700)">
+    <use href="#cPallet" x="0" y="0"/>
+    <use href="#cCarton" x="6" y="-50"/><use href="#cCarton" x="72" y="-52"/><use href="#cCarton" x="138" y="-49"/>
+    <use href="#cCarton" x="6" y="-100"/><use href="#cCarton" x="72" y="-102"/>
+  </g>
+  <!-- Palletised freight, right -->
+  <g transform="translate(1096 690)">
+    <use href="#cPallet" x="0" y="0"/>
+    <use href="#cCarton" x="6" y="-50"/><use href="#cCarton" x="72" y="-53"/><use href="#cCarton" x="138" y="-50"/>
+    <use href="#cCarton" x="6" y="-100"/><use href="#cCarton" x="72" y="-103"/><use href="#cCarton" x="138" y="-100"/>
+  </g>
+
+  <!-- Stacked totes and drums -->
+  <g>
+    <rect x="712" y="768" width="120" height="52" rx="5" fill="#1a237e"/>
+    <rect x="712" y="768" width="120" height="12" rx="5" fill="#28348f"/>
+    <rect x="712" y="716" width="120" height="52" rx="5" fill="#ffb300"/>
+    <rect x="712" y="716" width="120" height="12" rx="5" fill="#ffc733"/>
+    <rect x="712" y="664" width="120" height="52" rx="5" fill="#e6ebf3"/>
+    <rect x="712" y="664" width="120" height="12" rx="5" fill="#ffffff"/>
+  </g>
+
+  <!-- Baggage tug with driver towing a dolly -->
+  <g>
+    <rect x="470" y="792" width="150" height="58" rx="12" fill="url(#cSteel)"/>
+    <rect x="482" y="756" width="86" height="46" rx="9" fill="#e6ebf3"/>
+    <rect x="492" y="764" width="34" height="28" rx="5" fill="#2b4a7d"/>
+    <rect x="534" y="764" width="28" height="28" rx="5" fill="#2b4a7d"/>
+    <rect x="556" y="762" width="22" height="30" rx="6" fill="#ff8f00"/>
+    <circle cx="502" cy="756" r="10" fill="#f0c9a0"/>
+    <path d="M491 749 a11 11 0 0 1 22 0 z" fill="#ff6f00"/>
+    <circle cx="512" cy="854" r="20" fill="#16223a"/><circle cx="512" cy="854" r="8" fill="#7c8ba3"/>
+    <circle cx="596" cy="854" r="20" fill="#16223a"/><circle cx="596" cy="854" r="8" fill="#7c8ba3"/>
+    <rect x="620" y="826" width="52" height="10" rx="5" fill="#5b6a80"/>
+    <g transform="translate(672 786)">
+      <use href="#cPallet" x="0" y="0"/>
+      <use href="#cCarton" x="6" y="-50"/><use href="#cCarton" x="72" y="-52"/>
+    </g>
+  </g>
+
+  <!-- Safety cones -->
+  <g fill="#ff6f00">
+    <path d="M392 812 l12 -30 l12 30 z"/><rect x="384" y="810" width="40" height="7" rx="3"/>
+    <path d="M1006 700 l9 -22 l9 22 z"/><rect x="1000" y="698" width="30" height="6" rx="3"/>
+  </g>
+  <g fill="#e8edf5" opacity="0.7">
+    <rect x="397" y="798" width="14" height="5" rx="2"/>
+    <rect x="1009" y="691" width="10" height="4" rx="2"/>
+  </g>
+
+  <!-- Golden-hour light bloom and vignette -->
+  <ellipse cx="640" cy="600" rx="700" ry="300" fill="url(#cBloom)"/>
+  <rect width="1600" height="900" fill="url(#cVig)"/>
+
+
+
+</svg>

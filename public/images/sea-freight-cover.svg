@@ -1,0 +1,210 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="sfc-title sfc-desc" preserveAspectRatio="xMidYMid slice">
+  <title id="sfc-title">Sea freight: container ship at sea</title>
+  <desc id="sfc-desc">A large container vessel carrying stacked freight across open water at dusk, with a port skyline behind it.</desc>
+  <defs>
+    <linearGradient id="sSky" x1="0" y1="0" x2="0.06" y2="1">
+      <stop offset="0" stop-color="#0a1733"/>
+      <stop offset="0.24" stop-color="#1d3a63"/>
+      <stop offset="0.48" stop-color="#4a6a86"/>
+      <stop offset="0.68" stop-color="#b07a52"/>
+      <stop offset="0.85" stop-color="#e79a4e"/>
+      <stop offset="1" stop-color="#f6cf8e"/>
+    </linearGradient>
+    <linearGradient id="sSea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b4a6e"/>
+      <stop offset="0.35" stop-color="#17324f"/>
+      <stop offset="1" stop-color="#0a1728"/>
+    </linearGradient>
+    <linearGradient id="sHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a3c58"/>
+      <stop offset="0.5" stop-color="#16233a"/>
+      <stop offset="1" stop-color="#0b1424"/>
+    </linearGradient>
+    <linearGradient id="sHouse" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f2f5fa"/>
+      <stop offset="1" stop-color="#a9b6c8"/>
+    </linearGradient>
+    <radialGradient id="sSun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff3d0" stop-opacity="0.9"/>
+      <stop offset="0.34" stop-color="#ffb964" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#ff9a45" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sLamp" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff5d6" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#ffcf8a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sVig" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#050b1c" stop-opacity="0.45"/>
+      <stop offset="0.45" stop-color="#050b1c" stop-opacity="0"/>
+      <stop offset="1" stop-color="#050b1c" stop-opacity="0.55"/>
+    </linearGradient>
+    <!-- Reusable freight container, 60x34 -->
+    <g id="sBox">
+      <rect x="0" y="0" width="60" height="34" rx="2" fill="currentColor"/>
+      <rect x="0" y="0" width="60" height="7" fill="#ffffff" opacity="0.16"/>
+      <g fill="#000000" opacity="0.22">
+        <rect x="8" y="9" width="4" height="25"/><rect x="18" y="9" width="4" height="25"/>
+        <rect x="28" y="9" width="4" height="25"/><rect x="38" y="9" width="4" height="25"/>
+        <rect x="48" y="9" width="4" height="25"/>
+      </g>
+    </g>
+  </defs>
+
+  <!-- Dusk sky -->
+  <rect width="1600" height="520" fill="url(#sSky)"/>
+  <ellipse cx="1180" cy="500" rx="520" ry="240" fill="url(#sSun)"/>
+  <ellipse cx="300" cy="470" rx="360" ry="180" fill="url(#sSun)" opacity="0.4"/>
+
+  <!-- Cloud bands -->
+  <g>
+    <path d="M-40 130 C160 78 300 152 480 128 C660 104 800 52 1000 84 C1200 116 1400 92 1640 66 L1640 -20 L-40 -20 Z" fill="#131d33" opacity="0.9"/>
+    <path d="M-40 216 C200 180 340 236 560 214 C780 192 940 152 1140 180 C1340 208 1480 194 1640 172 L1640 132 L-40 156 Z" fill="#25334d" opacity="0.6"/>
+  </g>
+  <g fill="#f0b070" opacity="0.28">
+    <ellipse cx="420" cy="196" rx="240" ry="10"/>
+    <ellipse cx="1080" cy="180" rx="280" ry="11"/>
+  </g>
+
+  <!-- Gulls -->
+  <g stroke="#1a2438" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.5">
+    <path d="M300 210 q14 -12 28 0 q14 -12 28 0"/>
+    <path d="M392 258 q11 -9 22 0 q11 -9 22 0"/>
+    <path d="M980 196 q10 -9 20 0 q10 -9 20 0"/>
+  </g>
+
+  <!-- Distant port cranes and skyline on the horizon -->
+  <g fill="#0d1a30" opacity="0.75">
+    <rect x="0" y="440" width="180" height="80"/>
+    <rect x="1320" y="430" width="280" height="90"/>
+    <path d="M1392 430 L1392 336 L1470 336 L1508 430 Z"/>
+    <rect x="1386" y="328" width="14" height="110"/>
+    <rect x="1500" y="352" width="120" height="10" rx="4"/>
+    <path d="M1180 452 L1180 372 L1244 372 L1272 452 Z"/>
+    <rect x="1174" y="364" width="12" height="92"/>
+    <rect x="1266" y="384" width="96" height="9" rx="4"/>
+  </g>
+  <g fill="#ffd9a0" opacity="0.5">
+    <rect x="1360" y="470" width="10" height="8"/><rect x="1400" y="470" width="10" height="8"/>
+    <rect x="1440" y="470" width="10" height="8"/><rect x="1480" y="470" width="10" height="8"/>
+    <rect x="1520" y="470" width="10" height="8"/><rect x="1560" y="470" width="10" height="8"/>
+  </g>
+  <!-- Open sea -->
+  <rect y="512" width="1600" height="388" fill="url(#sSea)"/>
+  <!-- Sun glitter path -->
+  <g fill="#ffca7a" opacity="0.28">
+    <ellipse cx="1180" cy="560" rx="220" ry="16"/>
+    <ellipse cx="1150" cy="600" rx="270" ry="18"/>
+    <ellipse cx="1210" cy="648" rx="300" ry="20"/>
+    <ellipse cx="1130" cy="704" rx="330" ry="22"/>
+    <ellipse cx="1190" cy="768" rx="360" ry="24"/>
+  </g>
+  <!-- Swell lines -->
+  <g stroke="#8fb4d8" stroke-width="3" fill="none" opacity="0.16" stroke-linecap="round">
+    <path d="M-20 556 q60 -12 120 0 q60 12 120 0"/>
+    <path d="M300 596 q70 -14 140 0 q70 14 140 0"/>
+    <path d="M980 566 q60 -12 120 0 q60 12 120 0"/>
+    <path d="M60 660 q80 -14 160 0 q80 14 160 0"/>
+    <path d="M1080 700 q70 -14 140 0 q70 14 140 0"/>
+    <path d="M240 780 q90 -16 180 0 q90 16 180 0"/>
+    <path d="M1020 830 q80 -14 160 0 q80 14 160 0"/>
+  </g>
+
+  <!-- Container vessel: hull -->
+  <path d="M120 596 L1420 596 L1352 690 C1330 706 1290 714 1240 714 L300 714 C246 714 200 704 176 686 Z" fill="url(#sHull)"/>
+  <!-- Hull boot-top stripe -->
+  <path d="M132 656 L1408 656 L1392 682 C1372 696 1330 704 1284 704 L256 704 C216 704 184 696 164 682 Z" fill="#8a3a2a"/>
+  <!-- Waterline foam -->
+  <g fill="#dce9f5" opacity="0.5">
+    <rect x="120" y="708" width="1300" height="7" rx="3"/>
+  </g>
+
+  <!-- Deck stacks of containers (three rows deep) -->
+  <g>
+    <!-- far row -->
+    <g opacity="0.72">
+      <use href="#sBox" x="300" y="474" color="#1f4f7a"/>
+      <use href="#sBox" x="362" y="474" color="#8a4a2a"/>
+      <use href="#sBox" x="424" y="474" color="#2c6b4f"/>
+      <use href="#sBox" x="486" y="474" color="#7a6a2a"/>
+      <use href="#sBox" x="548" y="474" color="#243b63"/>
+      <use href="#sBox" x="610" y="474" color="#8a4a2a"/>
+      <use href="#sBox" x="672" y="474" color="#1f4f7a"/>
+      <use href="#sBox" x="734" y="474" color="#2c6b4f"/>
+      <use href="#sBox" x="796" y="474" color="#7a6a2a"/>
+      <use href="#sBox" x="858" y="474" color="#243b63"/>
+      <use href="#sBox" x="920" y="474" color="#8a4a2a"/>
+    </g>
+    <!-- upper tier -->
+    <g opacity="0.9">
+      <use href="#sBox" x="330" y="438" color="#2c6b4f"/>
+      <use href="#sBox" x="392" y="438" color="#243b63"/>
+      <use href="#sBox" x="454" y="438" color="#8a4a2a"/>
+      <use href="#sBox" x="516" y="438" color="#1f4f7a"/>
+      <use href="#sBox" x="578" y="438" color="#7a6a2a"/>
+      <use href="#sBox" x="640" y="438" color="#2c6b4f"/>
+      <use href="#sBox" x="702" y="438" color="#8a4a2a"/>
+      <use href="#sBox" x="764" y="438" color="#243b63"/>
+      <use href="#sBox" x="826" y="438" color="#1f4f7a"/>
+      <use href="#sBox" x="888" y="438" color="#2c6b4f"/>
+    </g>
+    <!-- top tier -->
+    <g>
+      <use href="#sBox" x="392" y="402" color="#8a4a2a"/>
+      <use href="#sBox" x="454" y="402" color="#1f4f7a"/>
+      <use href="#sBox" x="516" y="402" color="#2c6b4f"/>
+      <use href="#sBox" x="578" y="402" color="#243b63"/>
+      <use href="#sBox" x="640" y="402" color="#7a6a2a"/>
+      <use href="#sBox" x="702" y="402" color="#8a4a2a"/>
+      <use href="#sBox" x="764" y="402" color="#1f4f7a"/>
+      <use href="#sBox" x="826" y="402" color="#2c6b4f"/>
+    </g>
+  </g>
+
+  <!-- Bridge / accommodation block at the stern -->
+  <g>
+    <rect x="1090" y="486" width="240" height="112" rx="6" fill="url(#sHouse)"/>
+    <rect x="1090" y="486" width="240" height="16" rx="6" fill="#1a237e"/>
+    <g fill="#2b4a7d" opacity="0.75">
+      <rect x="1104" y="512" width="18" height="13" rx="3"/>
+      <rect x="1130" y="512" width="18" height="13" rx="3"/>
+      <rect x="1156" y="512" width="18" height="13" rx="3"/>
+      <rect x="1182" y="512" width="18" height="13" rx="3"/>
+      <rect x="1208" y="512" width="18" height="13" rx="3"/>
+      <rect x="1234" y="512" width="18" height="13" rx="3"/>
+      <rect x="1260" y="512" width="18" height="13" rx="3"/>
+      <rect x="1286" y="512" width="18" height="13" rx="3"/>
+      <rect x="1104" y="536" width="18" height="13" rx="3"/>
+      <rect x="1130" y="536" width="18" height="13" rx="3"/>
+      <rect x="1156" y="536" width="18" height="13" rx="3"/>
+      <rect x="1182" y="536" width="18" height="13" rx="3"/>
+      <rect x="1208" y="536" width="18" height="13" rx="3"/>
+      <rect x="1234" y="536" width="18" height="13" rx="3"/>
+      <rect x="1260" y="536" width="18" height="13" rx="3"/>
+      <rect x="1286" y="536" width="18" height="13" rx="3"/>
+    </g>
+    <!-- Bridge wings -->
+    <rect x="1064" y="500" width="30" height="54" rx="4" fill="#dbe3ee"/>
+    <rect x="1326" y="500" width="30" height="54" rx="4" fill="#dbe3ee"/>
+    <!-- Funnel -->
+    <rect x="1276" y="424" width="52" height="64" rx="6" fill="#1a237e"/>
+    <rect x="1276" y="424" width="52" height="14" rx="6" fill="#ff6f00"/>
+    <!-- Navigation mast + lights -->
+    <rect x="1150" y="404" width="6" height="84" fill="#c3ccdb"/>
+    <circle cx="1153" cy="402" r="30" fill="url(#sLamp)"/>
+    <circle cx="1153" cy="402" r="5" fill="#fff3d0"/>
+  </g>
+  <!-- Bow rail highlight -->
+  <path d="M120 596 L1420 596 L1418 604 L120 604 Z" fill="#dbe3ee" opacity="0.35"/>
+
+  <!-- Foreground swell in front of the hull -->
+  <g fill="url(#sSea)">
+    <path d="M-20 742 C220 716 380 764 620 740 C860 716 1020 764 1260 740 C1400 726 1520 742 1620 736 L1620 900 L-20 900 Z"/>
+  </g>
+  <g stroke="#a9c8e4" stroke-width="3" fill="none" opacity="0.14" stroke-linecap="round">
+    <path d="M120 792 q90 -14 180 0 q90 14 180 0"/>
+    <path d="M820 826 q80 -12 160 0 q80 12 160 0"/>
+  </g>
+
+  <rect width="1600" height="900" fill="url(#sVig)"/>
+
+</svg>

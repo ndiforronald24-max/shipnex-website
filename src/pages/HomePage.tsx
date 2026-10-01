@@ -109,12 +109,12 @@ export default function HomePage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { icon: Plane, title: 'Air Freight', desc: 'Fast reliable air cargo for time-sensitive shipments with global network coverage.', img: '/images/air-freight.svg', link: '/services/air-freight' },
-              { icon: Ship, title: 'Sea Freight', desc: 'Cost-effective ocean freight for large shipments with port-to-door service.', img: 'https://images.unsplash.com/photo-1574482620811-1aa16ffe3c82?auto=format&fit=crop&w=600&q=80', link: '/services/sea-freight' },
-              { icon: Truck, title: 'Road Freight', desc: 'Reliable ground transportation with FTL and LTL options and GPS tracking.', img: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=600&q=80', link: '/services/road-freight' },
-              { icon: Clock, title: 'Express Shipping', desc: 'Time-critical deliveries with priority handling and same-day options.', img: 'https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=600&q=80', link: '/services/express-shipping' },
-              { icon: Package, title: 'Vehicle Shipping', desc: 'Secure vehicle transport with full insurance and enclosed carrier options.', img: '/images/vehicle-shipping.svg', link: '/services/vehicle-shipping' },
-              { icon: Heart, title: 'Pet Transport', desc: 'Safe climate-controlled pet transportation with certified handlers.', img: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=600&q=80', link: '/services/pet-live-animal' },
+              { icon: Plane, title: 'Air Freight', desc: 'For shipments that cannot wait, combining speed, security and visibility at every step.', img: '/images/air-freight-cover.svg', link: '/services/air-freight' },
+              { icon: Ship, title: 'Sea Freight', desc: 'For cargo too big or too heavy to send by air, from containers to machinery.', img: '/images/sea-freight-cover.svg', link: '/services/sea-freight' },
+              { icon: Truck, title: 'Road Freight', desc: 'Moving goods by truck or van, locally or across a border, wherever ships and planes cannot reach.', img: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=600&q=80', link: '/services/road-freight' },
+              { icon: Clock, title: 'Express Shipping', desc: 'For urgent documents, personal packages and time-sensitive items that need to move without delay.', img: 'https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=600&q=80', link: '/services/express-shipping' },
+              { icon: Package, title: 'Vehicle Shipping', desc: 'For cars, SUVs, motorcycles and vans, coordinated locally and internationally.', img: '/images/vehicle-shipping.svg', link: '/services/vehicle-shipping' },
+              { icon: Heart, title: 'Pet Transport', desc: 'Helping families coordinate safe, comfortable journeys for their animals.', img: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=600&q=80', link: '/services/pet-live-animal' },
             ].map((service, i) => (
               <Link key={i} to={service.link} className="group card-lift bg-white rounded-2xl overflow-hidden border border-gray-100">
                 <div className="h-48 overflow-hidden relative">
