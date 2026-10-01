@@ -232,19 +232,37 @@ builder.Services.AddCors(options =>
     // Local frontends used during development (vite dev/preview and the common
     // alternate ports). These are always allowed in Development so that a
     // configured production origin list (Cors:AllowedOrigins) can never lock the
-    // local UI out of the API. In Production only the explicitly configured
-    // origins are allowed.
+    // local UI out of the API.
     var devOrigins = new[] { "http://localhost:5173", "http://localhost:3000", "http://localhost:4173" };
-    var origins = builder.Environment.IsDevelopment()
-        ? configuredOrigins.Concat(devOrigins).Distinct(StringComparer.OrdinalIgnoreCase).ToArray()
-        : configuredOrigins.Length > 0 ? configuredOrigins : devOrigins;
-    options.AddPolicy("AllowFrontend", policy =>
+    if (builder.Environment.IsDevelopment())
     {
-        policy.WithOrigins([.. origins])
-              .WithHeaders("Content-Type", "Authorization")
-              .WithMethods("GET", "POST", "PUT", "DELETE", "PATCH")
-              .AllowCredentials();
-    });
+        options.AddPolicy("AllowFrontend", policy => policy
+            .WithOrigins([.. configuredOrigins.Concat(devOrigins).Distinct(StringComparer.OrdinalIgnoreCase)])
+            .WithHeaders("Content-Type", "Authorization")
+            .WithMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+            .AllowCredentials());
+    }
+    else
+    {
+        // Outside Development there must be an explicit origin list. The old
+        // code fell back to devOrigins here, so a Production deploy with no
+        // Cors__AllowedOrigins set served a policy allowing ONLY localhost and
+        // silently broke the real site. Fail at startup instead: a container that
+        // will not serve traffic is obvious, one that 403s every browser request
+        // is not.
+        if (configuredOrigins.Length == 0)
+        {
+            throw new InvalidOperationException(
+                "Cors:AllowedOrigins is not configured. Set Cors__AllowedOrigins to a semicolon-separated list of " +
+                "your public origins (for example https://shipnex.com;https://www.shipnex.com).");
+        }
+
+        options.AddPolicy("AllowFrontend", policy => policy
+            .WithOrigins([.. configuredOrigins])
+            .WithHeaders("Content-Type", "Authorization")
+            .WithMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+            .AllowCredentials());
+    }
 });
 
 // ---------- Swagger ----------

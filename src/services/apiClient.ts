@@ -1,6 +1,13 @@
 import type { CreateOfficeRequest, UpdateOfficeRequest } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// Default to a RELATIVE '/api' rather than http://localhost:5000/api.
+// In production nginx serves the SPA and proxies /api/ to the backend on the
+// same origin (nginx.prod.conf), so a relative URL is correct and needs no
+// CORS round trip. The previous localhost default silently shipped to the
+// live build whenever VITE_API_URL was not set at build time, which pointed
+// every customer's browser at their own machine. VITE_API_URL still wins when
+// it is present, so a split-host deployment can override it.
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 class ApiClient {
   private token: string | null = null;
