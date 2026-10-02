@@ -15,6 +15,29 @@
     <PackageReference Include="Moq" Version="4.20.70" />
   </ItemGroup>
 
+  <!--
+    Transitive pinning for HIGH-severity advisories, mirroring the set applied in
+    ShipNex.Infrastructure. A direct reference in that project does not win the
+    version resolution here, so each project that pulls these in needs its own pin.
+
+      Npgsql 8.0.0              CVE-2024-32655  SQL injection via protocol message
+                                 size overflow. Fixed in 8.0.3.
+      System.Text.Json 8.0.0    CVE-2024-30105, CVE-2024-43485 (DoS). Fixed in 8.0.5.
+      Caching.Memory 8.0.0      CVE-2024-43483  hash-flooding DoS. Fixed in 8.0.1.
+      System.Net.Http 4.3.0     CVE-2018-8292   auth header leaked across redirects.
+                                 Fixed in 4.3.4.
+      Text.RegularExpressions   CVE-2019-0820   ReDoS. Fixed in 4.3.1.
+
+    The last two arrive via Microsoft.AspNetCore.Mvc.Testing.
+  -->
+  <ItemGroup>
+    <PackageReference Include="Npgsql" Version="8.0.3" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\ShipNex.Api\ShipNex.Api.csproj" />
   </ItemGroup>

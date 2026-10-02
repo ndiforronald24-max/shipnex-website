@@ -21,6 +21,33 @@
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
   </ItemGroup>
 
+  <!--
+    Transitive pinning for known HIGH-severity advisories. These arrive indirectly via
+    Npgsql.EntityFrameworkCore.PostgreSQL and Microsoft.Extensions.*; adding them as
+    direct references is what forces NuGet to resolve a patched version.
+
+      Npgsql 8.0.0 - CVE-2024-32655, SQL injection via Postgres protocol message size
+        integer overflow. An attacker can make the driver write a message whose declared
+        size is too small, so the database reads trailing bytes as new messages and
+        executes arbitrary SQL as the application. CVSS 8.1, network exploitable.
+        Fixed in 8.0.3.
+
+      System.Text.Json 8.0.0 - CVE-2024-30105 (DoS via DeserializeAsyncEnumerable on
+        untrusted input) and CVE-2024-43485 (algorithmic-complexity DoS when
+        deserializing into a model with [JsonExtensionData]). Fixed in 8.0.4 and
+        8.0.5 respectively, so 8.0.5 covers both.
+
+      Microsoft.Extensions.Caching.Memory 8.0.0 - CVE-2024-43483, hash-flooding DoS.
+        Fixed in 8.0.1.
+
+    Remove these once the parent packages move past the affected ranges.
+  -->
+  <ItemGroup>
+    <PackageReference Include="Npgsql" Version="8.0.3" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\ShipNex.Domain\ShipNex.Domain.csproj" />
     <ProjectReference Include="..\ShipNex.Application\ShipNex.Application.csproj" />
