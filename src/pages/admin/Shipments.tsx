@@ -12,11 +12,11 @@ type SortKey = 'trackingNumber' | 'customer' | 'status' | 'origin' | 'destinatio
  * losing the button focus after a sort click.
  */
 function Th({ label, k, sortKey, onSort }: {
-  label: string; k?: SortKey; sortKey: SortKey; onSort: (k: SortKey) => void;
+  label: string; k?: SortKey; sortKey?: SortKey; onSort?: (k: SortKey) => void;
 }) {
   return (
     <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">
-      {k ? (
+      {k && sortKey && onSort ? (
         <button onClick={() => onSort(k)} className={`flex items-center gap-1 hover:text-gray-700 ${sortKey === k ? 'text-[#ff6f00]' : ''}`}>
           {label}<ArrowUpDown className="w-3 h-3" />
         </button>

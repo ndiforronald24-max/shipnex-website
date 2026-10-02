@@ -67,8 +67,17 @@ public class ShipmentService : IShipmentService
                 ReceiverAddress = request.ReceiverAddress,
                 Origin = request.Origin,
                 Destination = request.Destination,
+                OriginLatitude = request.OriginLatitude,
+                OriginLongitude = request.OriginLongitude,
+                DestinationLatitude = request.DestinationLatitude,
+                DestinationLongitude = request.DestinationLongitude,
                 Status = ShipmentStatus.ShipmentCreated,
                 CurrentLocationName = request.Origin,
+                // Seed the live position from the origin when we know it, so the map
+                // shows a marker from the moment the shipment exists rather than
+                // only after the first staff-entered tracking event.
+                CurrentLatitude = request.OriginLatitude,
+                CurrentLongitude = request.OriginLongitude,
                 Weight = request.Weight,
                 NumberOfPieces = request.NumberOfPieces,
                 ReferenceNumber = request.ReferenceNumber ?? string.Empty,

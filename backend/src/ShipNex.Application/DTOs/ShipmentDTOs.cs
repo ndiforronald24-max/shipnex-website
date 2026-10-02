@@ -16,7 +16,14 @@ public record CreateShipmentRequest(
     [param: StringLength(100)] string? ReferenceNumber,
     DateTime? EstimatedDelivery,
     [param: StringLength(500)] string? Notes,
-    Guid? CustomerId = null
+    Guid? CustomerId = null,
+    // Optional map coordinates. The entity has always had these columns; nothing
+    // ever populated them, so the origin/destination markers on the tracking map
+    // could never render. Latitude is -90..90, longitude -180..180.
+    [param: Range(-90, 90)] double? OriginLatitude = null,
+    [param: Range(-180, 180)] double? OriginLongitude = null,
+    [param: Range(-90, 90)] double? DestinationLatitude = null,
+    [param: Range(-180, 180)] double? DestinationLongitude = null
 );
 
 public record UpdateShipmentStatusRequest(

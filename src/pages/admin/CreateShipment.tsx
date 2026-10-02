@@ -11,6 +11,19 @@ const emptyForm = {
   shipmentType: 'Standard', serviceType: 'Standard',
   origin: '', destination: '',
   weight: '', numberOfPieces: '1', referenceNumber: '', estimatedDelivery: '', notes: '',
+  // Optional map coordinates. Blank means "not known" - the API treats null as
+  // absent rather than 0, which is what the validation range would otherwise
+  // reject. Populating these lights up the origin/destination markers on the
+  // customer tracking map.
+  originLat: '', originLng: '', destinationLat: '', destinationLng: '',
+};
+
+/** Blank string -> null, so an untouched field is omitted rather than sent as 0. */
+const optNum = (v: string): number | null => {
+  const t = v.trim();
+  if (t === '') return null;
+  const n = Number(t);
+  return Number.isFinite(n) ? n : null;
 };
 
 type FormShape = typeof emptyForm;
@@ -70,6 +83,12 @@ export default function CreateShipment() {
       if (form.referenceNumber) payload.referenceNumber = form.referenceNumber;
       if (form.estimatedDelivery) payload.estimatedDelivery = new Date(form.estimatedDelivery).toISOString();
       if (form.notes) payload.notes = form.notes;
+      // Coordinates are optional; only send the pair when both parts are present
+      // so a half-filled field cannot plot a marker in the wrong place.
+      const oLat = optNum(form.originLat), oLng = optNum(form.originLng);
+      if (oLat !== null && oLng !== null) { payload.originLatitude = oLat; payload.originLongitude = oLng; }
+      const dLat = optNum(form.destinationLat), dLng = optNum(form.destinationLng);
+      if (dLat !== null && dLng !== null) { payload.destinationLatitude = dLat; payload.destinationLongitude = dLng; }
       // All creation goes through the backend API
       const shipment = await apiClient.createShipment(payload);
       const shipmentId = shipment?.id ?? shipment?.data?.id;
@@ -101,8 +120,18 @@ export default function CreateShipment() {
       {step===0&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><User className="w-4 h-4"/>Sender</h3><Field label="Name" field="senderName" value={form.senderName} onChange={update} ph="John Doe" required/><Field label="Address" field="senderAddress" value={form.senderAddress} onChange={update} ph="123 Main St, City" required/><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2 mt-2"><User className="w-4 h-4"/>Receiver</h3><Field label="Name" field="receiverName" value={form.receiverName} onChange={update} ph="Jane Smith" required/><Field label="Address" field="receiverAddress" value={form.receiverAddress} onChange={update} ph="456 Oak Ave, City" required/></div>}
       {step===1&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><Package className="w-4 h-4"/>Shipment Type</h3><Select label="Type" field="shipmentType" value={form.shipmentType} onChange={update} options={['Standard','Express','AirFreight','SeaFreight','RoadFreight','VehicleShipping','PetTransport']}/><Field label="Reference Number (optional)" field="referenceNumber" value={form.referenceNumber} onChange={update} ph="REF-001"/></div>}
       {step===2&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><Package className="w-4 h-4"/>Service Level</h3><Select label="Service" field="serviceType" value={form.serviceType} onChange={update} options={['Standard','Express','Priority','Economy']}/></div>}
-      {step===3&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><MapPin className="w-4 h-4"/>Origin</h3><Field label="Origin (city, country)" field="origin" value={form.origin} onChange={update} ph="New York, USA" required/></div>}
-      {step===4&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><MapPin className="w-4 h-4"/>Destination</h3><Field label="Destination (city, country)" field="destination" value={form.destination} onChange={update} ph="Los Angeles, USA" required/></div>}
+      {step===3&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><MapPin className="w-4 h-4"/>Origin</h3><Field label="Origin (city, country)" field="origin" value={form.origin} onChange={update} ph="New York, USA" required/>
+              <div className="col-span-2 grid sm:grid-cols-2 gap-4">
+                <Field label="Origin latitude" field="originLat" value={form.originLat} onChange={update} type="number" ph="40.7128 (optional)"/>
+                <Field label="Origin longitude" field="originLng" value={form.originLng} onChange={update} type="number" ph="-74.0060 (optional)"/>
+              </div>
+              <p className="col-span-2 text-xs text-gray-500">Add coordinates to show this shipment on the customer's map. Look them up on Google Maps by right-clicking the location.</p></div>}
+      {step===4&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><MapPin className="w-4 h-4"/>Destination</h3><Field label="Destination (city, country)" field="destination" value={form.destination} onChange={update} ph="Los Angeles, USA" required/>
+              <div className="col-span-2 grid sm:grid-cols-2 gap-4">
+                <Field label="Destination latitude" field="destinationLat" value={form.destinationLat} onChange={update} type="number" ph="34.0522 (optional)"/>
+                <Field label="Destination longitude" field="destinationLng" value={form.destinationLng} onChange={update} type="number" ph="-118.2437 (optional)"/>
+              </div>
+              <p className="col-span-2 text-xs text-gray-500">Optional, but without these the map can only show the current position, not the route.</p></div>}
       {step===5&&<div className="grid md:grid-cols-2 gap-4"><Field label="Weight (kg)" field="weight" value={form.weight} onChange={update} type="number" ph="2.5" required/><Field label="Number of Pieces" field="numberOfPieces" value={form.numberOfPieces} onChange={update} type="number" ph="1" required/><Field label="Estimated Delivery (optional)" field="estimatedDelivery" value={form.estimatedDelivery} onChange={update} type="date"/><Field label="Notes (optional)" field="notes" value={form.notes} onChange={update} ph="Handle with care"/></div>}
       {step===6&&<div className="space-y-3">
         <h3 className="font-semibold text-sm flex items-center gap-2"><FileText className="w-4 h-4"/>Documents (optional)</h3>
