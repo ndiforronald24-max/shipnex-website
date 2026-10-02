@@ -322,6 +322,14 @@ public class ShipmentService : IShipmentService
             shipment.CurrentLocationName = request.LocationName;
             shipment.UpdatedAt = DateTime.UtcNow;
 
+            // Mirror the coordinates onto the shipment, not just the event. The public
+            // tracking DTO reads Shipment.CurrentLatitude/Longitude for the live map
+            // marker, so without this they stay null forever even though every
+            // TrackingEvent carries its own lat/lng. PetShipmentService already does
+            // this (see its AddTrackingEventAsync); shipments did not.
+            if (request.Latitude.HasValue) shipment.CurrentLatitude = request.Latitude;
+            if (request.Longitude.HasValue) shipment.CurrentLongitude = request.Longitude;
+
             // Create tracking event via DbSet to avoid concurrency issues
             var trackingEvent = new ShipmentTrackingEvent
             {
