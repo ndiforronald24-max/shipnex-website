@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { MapPin, Phone, Mail, Clock, Globe, Search, Filter, X, Navigation, Building2 } from 'lucide-react';
 import { apiClient } from '../services/apiClient';
 import type { OfficeResponse } from '../types';
@@ -6,7 +6,6 @@ import { OFFICE_REGIONS } from '../types';
 
 export default function OfficesPage() {
   const [offices, setOffices] = useState<OfficeResponse[]>([]);
-  const [filteredOffices, setFilteredOffices] = useState<OfficeResponse[]>([]);
   const [countries, setCountries] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -25,7 +24,6 @@ export default function OfficesPage() {
       const res = await apiClient.getAllOffices();
       const officeList = Array.isArray(res) ? res : res?.data ?? [];
       setOffices(officeList);
-      setFilteredOffices(officeList);
 
       const countrySet = new Set(officeList.map((o: OfficeResponse) => o.country).filter(Boolean));
       setCountries(Array.from(countrySet) as string[]);
@@ -40,7 +38,10 @@ export default function OfficesPage() {
     fetchOffices();
   }, [fetchOffices]);
 
-  useEffect(() => {
+  // Filtering is derived state, not state of its own: computing it in an effect
+  // meant an extra render per keystroke (and a setState-in-effect cascade) for
+  // something useMemo derives directly from the inputs.
+  const filteredOffices = useMemo(() => {
     let result = offices;
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
@@ -54,7 +55,7 @@ export default function OfficesPage() {
     }
     if (selectedRegion) result = result.filter(o => o.region === selectedRegion);
     if (selectedCountry) result = result.filter(o => o.country === selectedCountry);
-    setFilteredOffices(result);
+    return result;
   }, [offices, searchQuery, selectedRegion, selectedCountry]);
 
   const clearFilters = () => { setSearchQuery(''); setSelectedRegion(''); setSelectedCountry(''); };

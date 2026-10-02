@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Trash2 } from 'lucide-react';
 import { apiClient } from '../../services/apiClient';
 
@@ -6,8 +6,11 @@ export default function AdminPetShipments() {
   const [pets, setPets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => { fetchData(); }, []);
-  const fetchData = async () => { try { const r = await apiClient.getAllPets(); setPets(Array.isArray(r) ? r : r.data ?? []); } catch (e) { console.error(e); } finally { setLoading(false); } };
+  // useCallback gives fetchData a stable identity so the effect can depend on it
+  // safely. Declaring the effect first meant it captured the binding while that
+  // const was still initialising.
+  const fetchData = useCallback(async () => { try { const r = await apiClient.getAllPets(); setPets(Array.isArray(r) ? r : r.data ?? []); } catch (e) { console.error(e); } finally { setLoading(false); } }, []);
+  useEffect(() => { fetchData(); }, [fetchData]);
   const del = async (id: string) => { if (!confirm('Delete?')) return; try { await apiClient.deletePetShipment(id); fetchData(); } catch (e) { console.error(e); } };
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-4 border-[#ff6f00] border-t-transparent rounded-full animate-spin"></div></div>;

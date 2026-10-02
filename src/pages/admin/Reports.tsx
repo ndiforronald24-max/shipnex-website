@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { BarChart3, Download } from 'lucide-react';
 import { apiClient } from '../../services/apiClient';
 import { statusLabel } from '../../utils/auth';
@@ -8,12 +8,13 @@ export default function AdminReports() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => { fetchData(); }, []);
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try { const r = await apiClient.getAllShipments(); setShipments(Array.isArray(r) ? r : r?.data ?? []); }
     catch (e: any) { setError(e?.response?.data?.message || 'Failed to load report data'); }
     finally { setLoading(false); }
-  };
+  }, []);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   const report = useMemo(() => {
     const byStatus: Record<string, number> = {};

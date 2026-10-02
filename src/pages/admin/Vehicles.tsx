@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Truck, Plus, Pencil, Trash2, X, Save } from 'lucide-react';
 import { apiClient } from '../../services/apiClient';
 import { can } from '../../utils/auth';
@@ -15,12 +15,13 @@ export default function AdminVehicles() {
   const [editing, setEditing] = useState<any>(null);
   const manage = can('vehiclesManage');
 
-  useEffect(() => { fetchData(); }, []);
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try { const r = await apiClient.getAllVehicles(); setVehicles(Array.isArray(r) ? r : r?.data ?? []); }
     catch (e: any) { setError(e?.response?.data?.message || 'Failed to load vehicles'); }
     finally { setLoading(false); }
-  };
+  }, []);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   const save = async () => {
     try {

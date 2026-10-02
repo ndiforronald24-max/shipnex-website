@@ -13,6 +13,41 @@ const emptyForm = {
   weight: '', numberOfPieces: '1', referenceNumber: '', estimatedDelivery: '', notes: '',
 };
 
+type FormShape = typeof emptyForm;
+
+/**
+ * Declared at module scope on purpose. Defining these inside CreateShipment gave a
+ * brand-new component identity on every render, so React unmounted and remounted the
+ * subtree each time the form changed - which drops focus and in-progress keystrokes
+ * while typing. Hoisting gives them a stable identity.
+ */
+function Field({ label, field, value, onChange, type = 'text', ph = '', required = false }: {
+  label: string; field: keyof FormShape; value: string;
+  onChange: (f: string, v: string) => void; type?: string; ph?: string; required?: boolean;
+}) {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">{label}{required && <span className="text-red-500"> *</span>}</label>
+      <input type={type} value={value} onChange={e => onChange(field, e.target.value)} placeholder={ph}
+        className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#ff6f00] outline-none"/>
+    </div>
+  );
+}
+
+function Select({ label, field, value, onChange, options }: {
+  label: string; field: keyof FormShape; value: string;
+  onChange: (f: string, v: string) => void; options: string[];
+}) {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+      <select value={value} onChange={e => onChange(field, e.target.value)} className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm outline-none bg-white">
+        {options.map((o: string) => <option key={o} value={o}>{o}</option>)}
+      </select>
+    </div>
+  );
+}
+
 export default function CreateShipment() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
@@ -48,21 +83,6 @@ export default function CreateShipment() {
     finally { setSubmitting(false); }
   };
 
-  const Field = ({ label, field, type = 'text', ph = '', required = false }: any) => (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}{required && <span className="text-red-500"> *</span>}</label>
-      <input type={type} value={form[field as keyof typeof form]} onChange={e=>update(field,e.target.value)} placeholder={ph}
-        className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#ff6f00] outline-none"/>
-    </div>
-  );
-  const Select = ({ label, field, options }: any) => (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-      <select value={form[field as keyof typeof form]} onChange={e=>update(field,e.target.value)} className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm outline-none bg-white">
-        {options.map((o: string) => <option key={o} value={o}>{o}</option>)}
-      </select>
-    </div>
-  );
   const stepValid = (): boolean => {
     const f = form as any;
     switch (step) {
@@ -78,12 +98,12 @@ export default function CreateShipment() {
     <div className="flex items-center gap-2 mb-8 flex-wrap">{steps.map((s,i)=><div key={s} className="flex items-center gap-1"><div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium ${i<=step?'bg-[#ff6f00] text-white':'bg-gray-200 text-gray-500'}`}>{i<step?<Check className="w-3 h-3"/>:i+1}</div><span className={`text-xs ${i===step?'font-medium':'text-gray-400'}`}>{s}</span></div>)}</div>
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
       {error&&<div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 text-sm">{error}</div>}
-      {step===0&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><User className="w-4 h-4"/>Sender</h3><Field label="Name" field="senderName" ph="John Doe" required/><Field label="Address" field="senderAddress" ph="123 Main St, City" required/><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2 mt-2"><User className="w-4 h-4"/>Receiver</h3><Field label="Name" field="receiverName" ph="Jane Smith" required/><Field label="Address" field="receiverAddress" ph="456 Oak Ave, City" required/></div>}
-      {step===1&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><Package className="w-4 h-4"/>Shipment Type</h3><Select label="Type" field="shipmentType" options={['Standard','Express','AirFreight','SeaFreight','RoadFreight','VehicleShipping','PetTransport']}/><Field label="Reference Number (optional)" field="referenceNumber" ph="REF-001"/></div>}
-      {step===2&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><Package className="w-4 h-4"/>Service Level</h3><Select label="Service" field="serviceType" options={['Standard','Express','Priority','Economy']}/></div>}
-      {step===3&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><MapPin className="w-4 h-4"/>Origin</h3><Field label="Origin (city, country)" field="origin" ph="New York, USA" required/></div>}
-      {step===4&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><MapPin className="w-4 h-4"/>Destination</h3><Field label="Destination (city, country)" field="destination" ph="Los Angeles, USA" required/></div>}
-      {step===5&&<div className="grid md:grid-cols-2 gap-4"><Field label="Weight (kg)" field="weight" type="number" ph="2.5" required/><Field label="Number of Pieces" field="numberOfPieces" type="number" ph="1" required/><Field label="Estimated Delivery (optional)" field="estimatedDelivery" type="date"/><Field label="Notes (optional)" field="notes" ph="Handle with care"/></div>}
+      {step===0&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><User className="w-4 h-4"/>Sender</h3><Field label="Name" field="senderName" value={form.senderName} onChange={update} ph="John Doe" required/><Field label="Address" field="senderAddress" value={form.senderAddress} onChange={update} ph="123 Main St, City" required/><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2 mt-2"><User className="w-4 h-4"/>Receiver</h3><Field label="Name" field="receiverName" value={form.receiverName} onChange={update} ph="Jane Smith" required/><Field label="Address" field="receiverAddress" value={form.receiverAddress} onChange={update} ph="456 Oak Ave, City" required/></div>}
+      {step===1&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><Package className="w-4 h-4"/>Shipment Type</h3><Select label="Type" field="shipmentType" value={form.shipmentType} onChange={update} options={['Standard','Express','AirFreight','SeaFreight','RoadFreight','VehicleShipping','PetTransport']}/><Field label="Reference Number (optional)" field="referenceNumber" value={form.referenceNumber} onChange={update} ph="REF-001"/></div>}
+      {step===2&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><Package className="w-4 h-4"/>Service Level</h3><Select label="Service" field="serviceType" value={form.serviceType} onChange={update} options={['Standard','Express','Priority','Economy']}/></div>}
+      {step===3&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><MapPin className="w-4 h-4"/>Origin</h3><Field label="Origin (city, country)" field="origin" value={form.origin} onChange={update} ph="New York, USA" required/></div>}
+      {step===4&&<div className="grid md:grid-cols-2 gap-4"><h3 className="col-span-2 font-semibold text-sm flex items-center gap-2"><MapPin className="w-4 h-4"/>Destination</h3><Field label="Destination (city, country)" field="destination" value={form.destination} onChange={update} ph="Los Angeles, USA" required/></div>}
+      {step===5&&<div className="grid md:grid-cols-2 gap-4"><Field label="Weight (kg)" field="weight" value={form.weight} onChange={update} type="number" ph="2.5" required/><Field label="Number of Pieces" field="numberOfPieces" value={form.numberOfPieces} onChange={update} type="number" ph="1" required/><Field label="Estimated Delivery (optional)" field="estimatedDelivery" value={form.estimatedDelivery} onChange={update} type="date"/><Field label="Notes (optional)" field="notes" value={form.notes} onChange={update} ph="Handle with care"/></div>}
       {step===6&&<div className="space-y-3">
         <h3 className="font-semibold text-sm flex items-center gap-2"><FileText className="w-4 h-4"/>Documents (optional)</h3>
         {docs.map((d,i)=>(<div key={i} className="flex items-center gap-2 bg-gray-50 rounded-xl p-3 text-sm">

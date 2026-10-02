@@ -1,10 +1,29 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Plus, Search, Eye, FileText, MapPin, ArrowUpDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { apiClient } from '../../services/apiClient';
 import { statusLabel, statusBadgeClass, ALL_STATUSES, can } from '../../utils/auth';
 import { Link } from 'react-router-dom';
 
 type SortKey = 'trackingNumber' | 'customer' | 'status' | 'origin' | 'destination' | 'estimatedDelivery' | 'lastUpdated';
+
+/**
+ * Module scope on purpose. Declared inside AdminShipments, this got a new identity
+ * on every render, so React tore down and rebuilt all ten header cells each time -
+ * losing the button focus after a sort click.
+ */
+function Th({ label, k, sortKey, onSort }: {
+  label: string; k?: SortKey; sortKey: SortKey; onSort: (k: SortKey) => void;
+}) {
+  return (
+    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">
+      {k ? (
+        <button onClick={() => onSort(k)} className={`flex items-center gap-1 hover:text-gray-700 ${sortKey === k ? 'text-[#ff6f00]' : ''}`}>
+          {label}<ArrowUpDown className="w-3 h-3" />
+        </button>
+      ) : label}
+    </th>
+  );
+}
 
 export default function AdminShipments() {
   const [shipments, setShipments] = useState<any[]>([]);
@@ -17,11 +36,12 @@ export default function AdminShipments() {
   const [page, setPage] = useState(1);
   const perPage = 10;
 
-  useEffect(() => { fetchData(); }, []);
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try { const r = await apiClient.getAllShipments(); setShipments(Array.isArray(r) ? r : r?.data ?? []); }
     catch (e: any) { setError(e?.response?.data?.message || 'Failed to load shipments'); } finally { setLoading(false); }
-  };
+  }, []);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   const customerOf = (s: any) => s.receiverName || s.senderName || '—';
   const updatedOf = (s: any) => s.lastUpdated || s.updatedAt || s.createdAt;
@@ -56,16 +76,6 @@ export default function AdminShipments() {
   if (loading) return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-4 border-[#ff6f00] border-t-transparent rounded-full animate-spin"></div></div>;
   if (error) return <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">{error}</div>;
 
-  const Th = ({ label, k }: { label: string; k?: SortKey }) => (
-    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">
-      {k ? (
-        <button onClick={() => sortBy(k)} className={`flex items-center gap-1 hover:text-gray-700 ${sortKey === k ? 'text-[#ff6f00]' : ''}`}>
-          {label}<ArrowUpDown className="w-3 h-3" />
-        </button>
-      ) : label}
-    </th>
-  );
-
   return (<div>
     <div className="flex items-center justify-between mb-6">
       <div><h1 className="text-2xl font-bold">Shipments</h1><p className="text-gray-500 text-sm">{filtered.length} shipments</p></div>
@@ -83,15 +93,15 @@ export default function AdminShipments() {
       </div>
       <div className="overflow-x-auto">
       <table className="w-full min-w-[900px]"><thead className="bg-gray-50/80"><tr>
-        <Th label="Tracking Number" k="trackingNumber" />
-        <Th label="Customer" k="customer" />
+        <Th label="Tracking Number" k="trackingNumber" sortKey={sortKey} onSort={sortBy} />
+        <Th label="Customer" k="customer" sortKey={sortKey} onSort={sortBy} />
         <Th label="Type" />
-        <Th label="Origin" k="origin" />
-        <Th label="Destination" k="destination" />
-        <Th label="Status" k="status" />
+        <Th label="Origin" k="origin" sortKey={sortKey} onSort={sortBy} />
+        <Th label="Destination" k="destination" sortKey={sortKey} onSort={sortBy} />
+        <Th label="Status" k="status" sortKey={sortKey} onSort={sortBy} />
         <Th label="Current Location" />
-        <Th label="Est. Delivery" k="estimatedDelivery" />
-        <Th label="Last Updated" k="lastUpdated" />
+        <Th label="Est. Delivery" k="estimatedDelivery" sortKey={sortKey} onSort={sortBy} />
+        <Th label="Last Updated" k="lastUpdated" sortKey={sortKey} onSort={sortBy} />
         <Th label="Actions" />
       </tr></thead><tbody className="divide-y divide-gray-50">
         {rows.length===0?<tr><td colSpan={10} className="px-5 py-12 text-center text-gray-400">No shipments match your search</td></tr>:

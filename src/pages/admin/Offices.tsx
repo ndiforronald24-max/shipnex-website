@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Building2, MapPin, Phone, Mail, Clock, Plus, Edit2, Trash2, X, Save, Eye, EyeOff } from 'lucide-react';
 import { apiClient } from '../../services/apiClient';
 import type { OfficeResponse, CreateOfficeRequest } from '../../types';
@@ -15,13 +15,13 @@ export default function AdminOffices() {
   const [saving, setSaving] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
-  useEffect(() => { fetchData(); }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try { const r = await apiClient.getAllOffices(); setOffices(Array.isArray(r) ? r : r?.data ?? []); }
     catch (e: any) { setError(e?.response?.data?.message || 'Failed to load offices'); }
     finally { setLoading(false); }
-  };
+  }, []);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   const handleCreate = () => { setEditingOffice(null); setFormData(emptyOffice); setShowForm(true); };
 

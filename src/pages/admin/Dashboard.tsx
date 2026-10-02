@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Package, Truck, CheckCircle, AlertTriangle, PawPrint, Clock, MapPin, Users, Building2, Bell, TrendingUp } from 'lucide-react';
 import { apiClient } from '../../services/apiClient';
 import { statusLabel, statusBadgeClass } from '../../utils/auth';
@@ -11,9 +11,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => { fetchData(); }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [adminStats, allShipments] = await Promise.all([
         apiClient.getAdminStats(),
@@ -29,7 +27,9 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-4 border-[#ff6f00] border-t-transparent rounded-full animate-spin"></div></div>;
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Search, Trash2 } from 'lucide-react';
 import { apiClient } from '../../services/apiClient';
 import { can } from '../../utils/auth';
@@ -9,8 +9,8 @@ export default function AdminCustomers() {
   const [search, setSearch] = useState('');
   const manage = can('customersManage');
 
-  useEffect(() => { fetchData(); }, []);
-  const fetchData = async () => { try { const r = await apiClient.getAllCustomers(); setCustomers(r.data || []); } catch (e) { console.error(e); } finally { setLoading(false); } };
+  const fetchData = useCallback(async () => { try { const r = await apiClient.getAllCustomers(); setCustomers(r.data || []); } catch (e) { console.error(e); } finally { setLoading(false); } }, []);
+  useEffect(() => { fetchData(); }, [fetchData]);
   const del = async (id: string) => { if (!confirm('Delete?')) return; try { await apiClient.deleteCustomer(id); fetchData(); } catch (e) { console.error(e); } };
   const filtered = customers.filter((c: any) => !search || `${c.firstName} ${c.lastName} ${c.email}`.toLowerCase().includes(search.toLowerCase()));
 
