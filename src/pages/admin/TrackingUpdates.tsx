@@ -48,9 +48,11 @@ export default function AdminTrackingUpdates() {
           link: `/admin/shipments/${s.id}`,
         });
       } else {
-        for (const e of events) {
+        for (const [ei, e] of events.entries()) {
           out.push({
-            key: `s-${s.id}-${e.timestamp ?? e.eventTime ?? Math.random()}`,
+            // Index is the last resort, not Math.random(): a random key changes on
+            // every render, so React cannot match the row and remounts it.
+            key: `s-${s.id}-${e.timestamp ?? e.eventTime ?? ei}`,
             kind: 'shipment', trackingNumber: s.trackingNumber,
             route: `${s.origin ?? ''} → ${s.destination ?? ''}`,
             status: e.status ?? s.status,
@@ -72,9 +74,9 @@ export default function AdminTrackingUpdates() {
           link: '/admin/pet-shipments',
         });
       } else {
-        for (const e of events) {
+        for (const [ei, e] of events.entries()) {
           out.push({
-            key: `p-${p.id}-${e.eventTime ?? e.id ?? Math.random()}`,
+            key: `p-${p.id}-${e.eventTime ?? e.id ?? ei}`,
             kind: 'pet', trackingNumber: p.trackingNumber,
             route: `${p.origin ?? ''} → ${p.destination ?? ''}`,
             status: e.careStatus ?? e.eventType ?? p.journeyStatus ?? '—',

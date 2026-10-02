@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Lock } from 'lucide-react';
 import { apiClient } from '../../services/apiClient';
 
@@ -8,12 +8,13 @@ export default function AdminAuditLogs() {
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
 
-  useEffect(() => { fetchData(); }, []);
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try { const r = await apiClient.getAuditLogs(200); setLogs(Array.isArray(r) ? r : r?.data ?? []); }
     catch (e: any) { setError(e?.response?.data?.message || 'Failed to load audit logs'); }
     finally { setLoading(false); }
-  };
+  }, []);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   // Audit logs are strictly read-only — no edit or delete actions exist here by design.
   const filtered = logs.filter((l: any) => !search ||

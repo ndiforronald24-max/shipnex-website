@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ShieldCheck, ShieldOff, Check, X } from 'lucide-react';
 import { apiClient } from '../../services/apiClient';
 import { can, getAuthUser, ROLES } from '../../utils/auth';
@@ -13,12 +13,13 @@ export default function AdminStaff() {
   const manage = can('staffManage'); // SuperAdmin only — backend enforces this too
   const me = getAuthUser();
 
-  useEffect(() => { fetchData(); }, []);
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try { const r = await apiClient.getStaff(); setUsers(Array.isArray(r) ? r : r?.data ?? []); }
     catch (e: any) { setError(e?.response?.data?.message || 'Failed to load staff'); }
     finally { setLoading(false); }
-  };
+  }, []);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   const saveUser = async (u: any) => {
     try {
