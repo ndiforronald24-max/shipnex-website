@@ -91,7 +91,7 @@ export default function OfficesPage() {
             <Globe className="w-10 h-10 text-[#ff6f00]" />
             <h1 className="text-4xl md:text-5xl font-bold">Global Offices</h1>
           </div>
-          <p className="text-lg text-gray-200 max-w-2xl mx-auto">Find a ShipNex location near you. We operate across {OFFICE_REGIONS.length} regions worldwide.</p>
+          <p className="text-lg text-gray-200 max-w-2xl mx-auto">Find a ShipNexaro location near you. We operate across {OFFICE_REGIONS.length} regions worldwide.</p>
         </div>
       </section>
 

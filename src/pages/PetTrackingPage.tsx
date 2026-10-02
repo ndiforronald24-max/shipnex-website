@@ -283,7 +283,7 @@ export default function PetTrackingPage() {
               {result.photoUrl ? (
                 <img
                   src={result.photoUrl}
-                  alt={`${result.petName} the ${result.petType.toLowerCase()} travelling with ShipNex`}
+                  alt={`${result.petName} the ${result.petType.toLowerCase()} travelling with ShipNexaro`}
                   className="w-28 h-28 rounded-2xl object-cover shadow-md"
                 />
               ) : (

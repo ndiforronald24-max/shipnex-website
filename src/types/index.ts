@@ -1,5 +1,5 @@
 /**
- * Shared TypeScript types for the ShipNex frontend.
+ * Shared TypeScript types for the ShipNexaro frontend.
  */
 
 export interface User {

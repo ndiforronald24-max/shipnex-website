@@ -168,7 +168,7 @@ export default function ServicesPage() {
                 <div className="rounded-3xl overflow-hidden shadow-xl">
                   <img
                     src={section.img}
-                    alt={`${section.title} at ShipNex`}
+                    alt={`${section.title} at ShipNexaro`}
                     loading="lazy"
                     className="w-full h-72 sm:h-96 object-cover"
                   />

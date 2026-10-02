@@ -13,7 +13,7 @@ export default function PrivacyPage() {
         <h2 className="text-xl font-semibold text-gray-800">Third-Party Sharing</h2>
         <p>We do not sell your personal data. We may share information with shipping partners solely to fulfill your shipment requests.</p>
         <h2 className="text-xl font-semibold text-gray-800">Contact Us</h2>
-        <p>For privacy concerns, contact us at privacy@shipnex.com.</p>
+        <p>For privacy concerns, contact us at privacy@shipnexaro.com.</p>
       </div>
     </div>
   );

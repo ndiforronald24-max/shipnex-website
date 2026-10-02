@@ -36,8 +36,8 @@ export default function Footer() {
           <div>
             <Link to="/" className="inline-block mb-5 group">
               <img
-                src="/brand/shipnex-wordmark-light.png"
-                alt="ShipNex"
+                src="/brand/shipnexaro-wordmark-light.png"
+                alt="ShipNexaro"
                 width={720}
                 height={147}
                 className="h-10 w-auto object-contain"
@@ -46,7 +46,7 @@ export default function Footer() {
             <p className="text-sm text-gray-300 leading-relaxed mb-5">Your trusted partner for fast reliable shipping and logistics solutions worldwide. Connecting the world moving what matters.</p>
             <div className="flex items-center gap-2 text-sm text-gray-300">
               <Mail className="w-4 h-4 text-[#ff6f00]" />
-              <span>support@shipnex.com</span>
+              <span>support@shipnexaro.com</span>
             </div>
           </div>
 
@@ -79,7 +79,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-gray-300">
               <li className="flex items-start gap-2"><MapPin className="w-4 h-4 text-[#ff6f00] mt-0.5 flex-shrink-0" /><span>Global headquarters with offices worldwide</span></li>
               <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-[#ff6f00] flex-shrink-0" /><span>+1 (800) SHIP-NEX</span></li>
-              <li className="flex items-center gap-2"><Mail className="w-4 h-4 text-[#ff6f00] flex-shrink-0" /><span>support@shipnex.com</span></li>
+              <li className="flex items-center gap-2"><Mail className="w-4 h-4 text-[#ff6f00] flex-shrink-0" /><span>support@shipnexaro.com</span></li>
             </ul>
             <div className="mt-6">
               <Link to="/track" className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#ff6f00] to-[#ff8f00] rounded-xl text-sm font-semibold hover:shadow-lg hover:shadow-orange-500/25 transition-all">Track Shipment</Link>
@@ -88,7 +88,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/10 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-400">&copy; 2026 ShipNex. All rights reserved.</p>
+          <p className="text-sm text-gray-400">&copy; 2026 ShipNexaro. All rights reserved.</p>
           <div className="flex gap-6 text-sm text-gray-400">
             <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
             <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>

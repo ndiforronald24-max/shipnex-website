@@ -93,8 +93,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         <div className="flex items-center justify-between px-5 h-16 border-b border-white/10 flex-shrink-0">
           <Link to="/admin" className="min-w-0">
             <img
-              src="/brand/shipnex-wordmark-light.png"
-              alt="ShipNex"
+              src="/brand/shipnexaro-wordmark-light.png"
+              alt="ShipNexaro"
               width={720}
               height={147}
               className="h-7 w-auto object-contain"
@@ -156,7 +156,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               <Menu className="w-5 h-5" />
             </button>
             <span className="text-sm text-gray-500 hidden sm:inline">Signed in as <span className="font-medium text-gray-700">{user?.email ?? 'admin'}</span></span>
-            <span className="text-sm text-gray-500 sm:hidden">ShipNex Admin</span>
+            <span className="text-sm text-gray-500 sm:hidden">ShipNexaro Admin</span>
           </div>
 
           <div className="relative">

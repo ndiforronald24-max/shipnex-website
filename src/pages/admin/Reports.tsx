@@ -45,7 +45,7 @@ export default function AdminReports() {
     const blob = new Blob([header + rows], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = `shipnex-report-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.href = url; a.download = `shipnexaro-report-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click(); URL.revokeObjectURL(url);
   };
 

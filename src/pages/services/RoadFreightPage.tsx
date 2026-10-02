@@ -35,7 +35,7 @@ export default function RoadFreightPage() {
                 Reliable Transportation <span className="text-[#ff6f00]">From Door to Door</span>
               </h1>
               <p className="text-lg text-gray-200 mb-4 leading-relaxed">
-                Road freight is at the heart of efficient regional and domestic transportation. ShipNex provides flexible road freight solutions for businesses and individuals who need their goods moved safely and reliably by road.
+                Road freight is at the heart of efficient regional and domestic transportation. ShipNexaro provides flexible road freight solutions for businesses and individuals who need their goods moved safely and reliably by road.
               </p>
               <p className="text-base text-gray-300 mb-8 leading-relaxed">
                 From local deliveries to cross-border transportation, we help move your cargo where it needs to go.
@@ -68,10 +68,10 @@ export default function RoadFreightPage() {
         </div>
       </section>
 
-      {/* Why Choose ShipNex Road Freight? */}
+      {/* Why Choose ShipNexaro Road Freight? */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose ShipNex Road Freight?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose ShipNexaro Road Freight?</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {benefits.map((benefit) => (
               <div key={benefit.title} className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
@@ -121,7 +121,7 @@ export default function RoadFreightPage() {
             Your customers are waiting. Your business cannot afford unnecessary delays.
           </p>
           <p className="text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-            ShipNex helps you move your goods efficiently, giving you a dependable transportation partner for the road ahead.
+            ShipNexaro helps you move your goods efficiently, giving you a dependable transportation partner for the road ahead.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -144,7 +144,7 @@ export default function RoadFreightPage() {
             </Link>
           </div>
           <p className="mt-12 text-lg font-semibold tracking-wide text-white/90">
-            Wherever the Road Leads, <span className="text-[#ff8f00]">ShipNex Moves With You.</span>
+            Wherever the Road Leads, <span className="text-[#ff8f00]">ShipNexaro Moves With You.</span>
           </p>
         </div>
       </section>

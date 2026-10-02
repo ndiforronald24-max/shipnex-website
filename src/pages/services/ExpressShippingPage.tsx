@@ -36,7 +36,7 @@ export default function ExpressShippingPage() {
                 Some shipments simply cannot wait.
               </p>
               <p className="text-base text-gray-300 mb-8 leading-relaxed">
-                ShipNex Express Shipping is designed for customers who need their packages delivered quickly and efficiently. Whether you are sending an urgent document, a personal package, a business order or a time-sensitive item, we help get it moving without unnecessary delays.
+                ShipNexaro Express Shipping is designed for customers who need their packages delivered quickly and efficiently. Whether you are sending an urgent document, a personal package, a business order or a time-sensitive item, we help get it moving without unnecessary delays.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link to="/contact" className="px-6 py-3 bg-[#ff6f00] rounded-lg font-semibold hover:bg-[#e65100] transition-colors">
@@ -65,10 +65,10 @@ export default function ExpressShippingPage() {
         </div>
       </section>
 
-      {/* Why Choose ShipNex Express? */}
+      {/* Why Choose ShipNexaro Express? */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose ShipNex Express?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose ShipNexaro Express?</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {benefits.map((benefit) => (
               <div key={benefit.title} className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
@@ -143,7 +143,7 @@ export default function ExpressShippingPage() {
             </Link>
           </div>
           <p className="mt-12 text-lg font-semibold tracking-wide text-white/90">
-            Fast Delivery Starts With <span className="text-[#ff8f00]">ShipNex.</span>
+            Fast Delivery Starts With <span className="text-[#ff8f00]">ShipNexaro.</span>
           </p>
         </div>
       </section>

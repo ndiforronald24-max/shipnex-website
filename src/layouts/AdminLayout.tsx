@@ -25,7 +25,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Sidebar */}
       <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#1a237e] text-white transform transition-transform lg:translate-x-0 lg:static ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex items-center justify-between h-16 px-4 border-b border-white/10">
-          <span className="text-xl font-bold">ShipNex Admin</span>
+          <span className="text-xl font-bold">ShipNexaro Admin</span>
           <button onClick={() => setSidebarOpen(false)} className="lg:hidden p-1">
             <X className="w-5 h-5" />
           </button>

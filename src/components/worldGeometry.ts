@@ -1,5 +1,5 @@
 /**
- * Simplified world coastline geometry for the ShipNex network map.
+ * Simplified world coastline geometry for the ShipNexaro network map.
  *
  * Coordinates are `[longitude, latitude]` pairs (degrees) traced as coarse
  * outlines. They are deliberately low fidelity: the map is rendered as a

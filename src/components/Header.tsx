@@ -71,17 +71,17 @@ export default function Header() {
             <span className="flex items-center gap-1">
               <Phone className="w-3 h-3" /> +1 (800) SHIP-NEX
             </span>
-            <span>support@shipnex.com</span>
+            <span>support@shipnexaro.com</span>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center group shrink-0" aria-label="ShipNex — home">
+          <Link to="/" className="flex items-center group shrink-0" aria-label="ShipNexaro — home">
             <img
-              src="/brand/shipnex-wordmark-light.png"
-              alt="ShipNex"
+              src="/brand/shipnexaro-wordmark-light.png"
+              alt="ShipNexaro"
               width={720}
               height={147}
               className="h-8 sm:h-9 lg:h-10 w-auto object-contain"

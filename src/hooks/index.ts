@@ -1,5 +1,5 @@
 /**
- * Custom React hooks for the ShipNex frontend.
+ * Custom React hooks for the ShipNexaro frontend.
  */
 
 import { useState, useEffect } from 'react';

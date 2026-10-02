@@ -135,8 +135,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why ShipNex */}
-      <section className="py-16"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div className="text-center mb-12"><h2 className="text-3xl font-bold mb-4">Why Choose ShipNex</h2><p className="text-gray-600 max-w-2xl mx-auto">Industry-leading logistics solutions backed by technology and trust</p></div><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">{[{ icon: Globe, title: 'Global Network', desc: 'Delivering to 200+ countries' },{ icon: Shield, title: 'Secure Transportation', desc: 'Full insurance coverage' },{ icon: MapPin, title: 'Shipment Tracking', desc: 'Real-time tracking updates' },{ icon: Clock, title: 'Professional Support', desc: '24/7 customer support' },{ icon: CheckCircle, title: 'Reliable Delivery', desc: '99.5% on-time rate' },{ icon: Heart, title: 'Pet-Friendly Services', desc: 'Specialized pet transport' }].map((feature, i) => (<div key={i} className="flex gap-4 p-6 rounded-xl bg-white shadow-md border border-gray-100"><div className="w-12 h-12 bg-[#ff6f00]/10 rounded-lg flex items-center justify-center flex-shrink-0"><feature.icon className="w-6 h-6 text-[#ff6f00]" /></div><div><h3 className="font-semibold text-base mb-1">{feature.title}</h3><p className="text-sm text-gray-600">{feature.desc}</p></div></div>))}</div></div></section>
+      {/* Why ShipNexaro */}
+      <section className="py-16"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div className="text-center mb-12"><h2 className="text-3xl font-bold mb-4">Why Choose ShipNexaro</h2><p className="text-gray-600 max-w-2xl mx-auto">Industry-leading logistics solutions backed by technology and trust</p></div><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">{[{ icon: Globe, title: 'Global Network', desc: 'Delivering to 200+ countries' },{ icon: Shield, title: 'Secure Transportation', desc: 'Full insurance coverage' },{ icon: MapPin, title: 'Shipment Tracking', desc: 'Real-time tracking updates' },{ icon: Clock, title: 'Professional Support', desc: '24/7 customer support' },{ icon: CheckCircle, title: 'Reliable Delivery', desc: '99.5% on-time rate' },{ icon: Heart, title: 'Pet-Friendly Services', desc: 'Specialized pet transport' }].map((feature, i) => (<div key={i} className="flex gap-4 p-6 rounded-xl bg-white shadow-md border border-gray-100"><div className="w-12 h-12 bg-[#ff6f00]/10 rounded-lg flex items-center justify-center flex-shrink-0"><feature.icon className="w-6 h-6 text-[#ff6f00]" /></div><div><h3 className="font-semibold text-base mb-1">{feature.title}</h3><p className="text-sm text-gray-600">{feature.desc}</p></div></div>))}</div></div></section>
 
       {/* Global Network Coverage */}
       <section className="py-16 bg-[#1a237e] text-white">
@@ -148,7 +148,7 @@ export default function HomePage() {
                 Where We Operate
               </div>
               <h2 className="text-3xl font-bold mb-4">Global Network Coverage</h2>
-              <p className="text-gray-200 mb-6 mx-auto max-w-2xl">With operations spanning six continents, ShipNex delivers to more than 200 countries worldwide.</p>
+              <p className="text-gray-200 mb-6 mx-auto max-w-2xl">With operations spanning six continents, ShipNexaro delivers to more than 200 countries worldwide.</p>
               <div className="grid grid-cols-2 gap-4 mb-8">{[{ stat: '200+', label: 'Countries' },{ stat: '50K+', label: 'Customers' },{ stat: '99.5%', label: 'On-time Rate' },{ stat: '24/7', label: 'Support' }].map((item, i) => (<div key={i} className="bg-white/10 rounded-lg p-4 text-center"><p className="text-2xl font-bold text-[#ff6f00]">{item.stat}</p><p className="text-sm text-gray-300">{item.label}</p></div>))}</div>
               <Link to="/offices" className="inline-flex items-center gap-2 px-6 py-3 bg-[#ff6f00] rounded-lg font-semibold hover:bg-[#e65100] transition-colors">Explore Global Offices <ArrowRight className="w-5 h-5" /></Link>
             </div>
@@ -198,8 +198,8 @@ export default function HomePage() {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: 'Sarah M.', role: 'Business Owner', text: 'ShipNex has been our go-to logistics partner for 3 years. Their air freight service is incredibly reliable.', rating: 5 },
-              { name: 'David K.', role: 'Pet Owner', text: 'I was nervous about transporting my Golden Retriever overseas but ShipNex made the process seamless.', rating: 5 },
+              { name: 'Sarah M.', role: 'Business Owner', text: 'ShipNexaro has been our go-to logistics partner for 3 years. Their air freight service is incredibly reliable.', rating: 5 },
+              { name: 'David K.', role: 'Pet Owner', text: 'I was nervous about transporting my Golden Retriever overseas but ShipNexaro made the process seamless.', rating: 5 },
               { name: 'Maria L.', role: 'E-commerce Seller', text: 'Their sea freight options have helped us cut shipping costs by 40%. The team is always responsive.', rating: 5 },
             ].map((t, i) => (
               <div key={i} className="glass rounded-2xl p-8 backdrop-blur-sm">

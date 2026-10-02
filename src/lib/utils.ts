@@ -1,5 +1,5 @@
 /**
- * Utility functions for the ShipNex frontend.
+ * Utility functions for the ShipNexaro frontend.
  */
 
 /**

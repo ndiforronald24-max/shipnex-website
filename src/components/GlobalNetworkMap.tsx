@@ -1,7 +1,7 @@
 /**
  * GlobalNetworkMap — self-contained SVG world map for the home page.
  *
- * Renders a stylised equirectangular world map with ShipNex hub cities and
+ * Renders a stylised equirectangular world map with ShipNexaro hub cities and
  * animated air / ground lanes. It deliberately avoids any external map
  * service (no API key, no network call, works offline) and reuses the
  * hand-traced coastline outlines in `./worldGeometry`.
@@ -192,9 +192,9 @@ export default function GlobalNetworkMap() {
           role="img"
           aria-labelledby={`${titleId} ${descId}`}
         >
-          <title id={titleId}>ShipNex global network coverage</title>
+          <title id={titleId}>ShipNexaro global network coverage</title>
           <desc id={descId}>
-            A world map showing {HUBS.length} ShipNex hubs across the Americas, EMEA and
+            A world map showing {HUBS.length} ShipNexaro hubs across the Americas, EMEA and
             APAC, connected by {AIR_LANES.length} air lanes and {GROUND_LANES.length} ground
             corridors.
           </desc>

@@ -50,7 +50,7 @@ export default function RegisterPage() {
           <div className="text-center mb-8">
             <UserPlus className="w-12 h-12 text-[#ff6f00] mx-auto mb-4" />
             <h1 className="text-2xl font-bold">Create Account</h1>
-            <p className="text-gray-500 text-sm mt-1">Join ShipNex today</p>
+            <p className="text-gray-500 text-sm mt-1">Join ShipNexaro today</p>
           </div>
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">{error}</div>

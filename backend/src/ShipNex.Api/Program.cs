@@ -254,7 +254,7 @@ builder.Services.AddCors(options =>
         {
             throw new InvalidOperationException(
                 "Cors:AllowedOrigins is not configured. Set Cors__AllowedOrigins to a semicolon-separated list of " +
-                "your public origins (for example https://shipnex.com;https://www.shipnex.com).");
+                "your public origins (for example https://shipnexaro.com;https://www.shipnexaro.com).");
         }
 
         options.AddPolicy("AllowFrontend", policy => policy

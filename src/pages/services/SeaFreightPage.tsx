@@ -45,7 +45,7 @@ export default function SeaFreightPage() {
                 When a shipment is too large, too heavy or too high in volume for air freight, sea freight is the efficient way to move it across international borders.
               </p>
               <p className="text-base text-gray-300 mb-8 leading-relaxed">
-                ShipNex provides sea freight solutions for businesses, importers, exporters and individuals who need dependable transportation for larger shipments. Whether you are shipping containers, commercial products, machinery, equipment or other large cargo, we help coordinate the journey from origin to destination.
+                ShipNexaro provides sea freight solutions for businesses, importers, exporters and individuals who need dependable transportation for larger shipments. Whether you are shipping containers, commercial products, machinery, equipment or other large cargo, we help coordinate the journey from origin to destination.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link to="/contact" className="px-6 py-3 bg-[#ff6f00] rounded-lg font-semibold hover:bg-[#e65100] transition-colors">
@@ -75,10 +75,10 @@ export default function SeaFreightPage() {
         </div>
       </section>
 
-      {/* Why Choose ShipNex Sea Freight? */}
+      {/* Why Choose ShipNexaro Sea Freight? */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose ShipNex Sea Freight?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose ShipNexaro Sea Freight?</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {benefits.map((benefit) => (
               <div key={benefit.title} className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
@@ -125,7 +125,7 @@ export default function SeaFreightPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Ship?</h2>
           <p className="text-gray-200 mb-10 max-w-2xl mx-auto leading-relaxed">
-            From smaller commercial loads to large-scale international cargo, ShipNex helps make sea transportation easier to manage.
+            From smaller commercial loads to large-scale international cargo, ShipNexaro helps make sea transportation easier to manage.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -143,12 +143,12 @@ export default function SeaFreightPage() {
             >
               Track Shipment
               <span className="text-xs font-normal text-white/70 mt-1">
-                Already shipped with ShipNex? Follow your cargo using your tracking number.
+                Already shipped with ShipNexaro? Follow your cargo using your tracking number.
               </span>
             </Link>
           </div>
           <p className="mt-12 text-lg font-semibold tracking-wide text-white/90">
-            Move Bigger. Reach Farther. <span className="text-[#ff8f00]">ShipNex.</span>
+            Move Bigger. Reach Farther. <span className="text-[#ff8f00]">ShipNexaro.</span>
           </p>
         </div>
       </section>

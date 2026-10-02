@@ -36,7 +36,7 @@ export default function VehicleShippingPage() {
                 Transporting a vehicle is different from shipping an ordinary package. Your vehicle is valuable, and it deserves professional care throughout its journey.
               </p>
               <p className="text-base text-gray-300 mb-8 leading-relaxed">
-                ShipNex provides vehicle shipping solutions for cars, SUVs, motorcycles, vans and other eligible vehicles, helping customers coordinate transportation locally and internationally.
+                ShipNexaro provides vehicle shipping solutions for cars, SUVs, motorcycles, vans and other eligible vehicles, helping customers coordinate transportation locally and internationally.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link to="/contact" className="px-6 py-3 bg-[#ff6f00] rounded-lg font-semibold hover:bg-[#e65100] transition-colors">
@@ -65,10 +65,10 @@ export default function VehicleShippingPage() {
         </div>
       </section>
 
-      {/* Why Choose ShipNex Vehicle Shipping? */}
+      {/* Why Choose ShipNexaro Vehicle Shipping? */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose ShipNex Vehicle Shipping?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose ShipNexaro Vehicle Shipping?</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {benefits.map((benefit) => (
               <div key={benefit.title} className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
@@ -120,7 +120,7 @@ export default function VehicleShippingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Your Vehicle. Our Responsibility.</h2>
           <p className="text-gray-200 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Whether you are buying a vehicle overseas, relocating, selling a vehicle, or transporting one for business, ShipNex helps make the journey easier to manage.
+            Whether you are buying a vehicle overseas, relocating, selling a vehicle, or transporting one for business, ShipNexaro helps make the journey easier to manage.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -143,7 +143,7 @@ export default function VehicleShippingPage() {
             </Link>
           </div>
           <p className="mt-12 text-lg font-semibold tracking-wide text-white/90">
-            Drive Less. Worry Less. <span className="text-[#ff8f00]">ShipNex Moves Your Vehicle.</span>
+            Drive Less. Worry Less. <span className="text-[#ff8f00]">ShipNexaro Moves Your Vehicle.</span>
           </p>
         </div>
       </section>

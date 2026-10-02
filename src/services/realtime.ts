@@ -160,7 +160,7 @@ export class ShipmentRealtimeClient {
           break
       }
     } catch (err) {
-      console.warn('[ShipNex Realtime] Failed to process broadcast message:', err)
+      console.warn('[ShipNexaro Realtime] Failed to process broadcast message:', err)
     }
   }
 

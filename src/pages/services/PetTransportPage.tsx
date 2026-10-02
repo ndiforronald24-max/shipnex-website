@@ -36,7 +36,7 @@ export default function PetTransportPage() {
                 Moving a pet requires more than getting from one destination to another. It requires planning, care, attention and responsible handling.
               </p>
               <p className="text-base text-gray-300 mb-4 leading-relaxed">
-                ShipNex Pet Transportation helps families and pet owners coordinate safe and comfortable journeys for their animals. Whether your pet is travelling across the country or internationally, our goal is to make the process easier for you and less stressful for your pet.
+                ShipNexaro Pet Transportation helps families and pet owners coordinate safe and comfortable journeys for their animals. Whether your pet is travelling across the country or internationally, our goal is to make the process easier for you and less stressful for your pet.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link to="/contact" className="px-6 py-3 bg-[#ff6f00] rounded-lg font-semibold hover:bg-[#e65100] transition-colors">
@@ -66,10 +66,10 @@ export default function PetTransportPage() {
         </div>
       </section>
 
-      {/* Why Choose ShipNex Pet Transportation? */}
+      {/* Why Choose ShipNexaro Pet Transportation? */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose ShipNex Pet Transportation?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose ShipNexaro Pet Transportation?</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {benefits.map((benefit) => (
               <div key={benefit.title} className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
@@ -124,7 +124,7 @@ export default function PetTransportPage() {
             Your pet is part of your family. That is why every journey deserves careful planning and responsible transportation.
           </p>
           <p className="text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-            With ShipNex, you can focus on the destination while we help coordinate the journey.
+            With ShipNexaro, you can focus on the destination while we help coordinate the journey.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -149,7 +149,7 @@ export default function PetTransportPage() {
           <p className="mt-12 text-lg font-semibold tracking-wide text-white/90">
             Safe Journeys. Caring Service. <span className="text-[#ff8f00]">Happy Reunions.</span>
           </p>
-          <p className="mt-2 text-sm text-white/60">ShipNex Pet Transportation</p>
+          <p className="mt-2 text-sm text-white/60">ShipNexaro Pet Transportation</p>
           <p className="mt-4 text-base text-white/80">
             They travel with care. You travel with peace of mind.
           </p>

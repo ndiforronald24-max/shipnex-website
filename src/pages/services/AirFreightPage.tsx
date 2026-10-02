@@ -41,7 +41,7 @@ export default function AirFreightPage() {
               Fast, Reliable Shipping <span className="text-[#ff6f00]">Across the World</span>
             </h1>
             <p className="text-lg text-gray-200 mb-4 leading-relaxed">
-              When time matters, your shipment cannot wait. ShipNex Air Freight gets it moving quickly, giving businesses and individuals dependable air cargo solutions for goods travelling across cities, countries, and continents.
+              When time matters, your shipment cannot wait. ShipNexaro Air Freight gets it moving quickly, giving businesses and individuals dependable air cargo solutions for goods travelling across cities, countries, and continents.
             </p>
             <p className="text-base text-gray-300 mb-8 leading-relaxed">
               From important business documents and commercial goods to urgent packages and special cargo, we combine four things in every shipment: speed, security, visibility at every step, and professional handling.
@@ -68,10 +68,10 @@ export default function AirFreightPage() {
         </div>
       </section>
 
-      {/* Why Choose ShipNex Air Freight? */}
+      {/* Why Choose ShipNexaro Air Freight? */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose ShipNex Air Freight?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose ShipNexaro Air Freight?</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {benefits.map((benefit) => (
               <div key={benefit.title} className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
@@ -118,13 +118,13 @@ export default function AirFreightPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ship With Confidence</h2>
           <p className="text-gray-200 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Whether you are sending one package or shipping goods for your business every week, ShipNex is ready to move your cargo efficiently. Tell us what you are sending and where it needs to go, and we will quote the fastest, most reliable air option.
+            Whether you are sending one package or shipping goods for your business every week, ShipNexaro is ready to move your cargo efficiently. Tell us what you are sending and where it needs to go, and we will quote the fastest, most reliable air option.
           </p>
           <Link to="/contact" className="inline-flex items-center gap-2 px-8 py-3 bg-[#ff6f00] rounded-lg font-semibold hover:bg-[#e65100] transition-colors">
             Get a Quote <ArrowRight className="w-5 h-5" />
           </Link>
           <p className="mt-10 text-lg font-semibold tracking-wide text-white/90">
-            Fast. Connected. Reliable. <span className="text-[#ff8f00]">ShipNex.</span>
+            Fast. Connected. Reliable. <span className="text-[#ff8f00]">ShipNexaro.</span>
           </p>
         </div>
       </section>
