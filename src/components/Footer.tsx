@@ -78,7 +78,7 @@ export default function Footer() {
             <h3 className="font-semibold mb-5 text-[#ff6f00] text-sm uppercase tracking-wider">Contact</h3>
             <ul className="space-y-3 text-sm text-gray-300">
               <li className="flex items-start gap-2"><MapPin className="w-4 h-4 text-[#ff6f00] mt-0.5 flex-shrink-0" /><span>Global headquarters with offices worldwide</span></li>
-              <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-[#ff6f00] flex-shrink-0" /><span>+1 (800) SHIP-NEX</span></li>
+              <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-[#ff6f00] flex-shrink-0" /><span>+1 (800) 744-7639</span></li>
               <li className="flex items-center gap-2"><Mail className="w-4 h-4 text-[#ff6f00] flex-shrink-0" /><span>support@shipnexaro.com</span></li>
             </ul>
             <div className="mt-6">

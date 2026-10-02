@@ -21,7 +21,9 @@ const services: ServiceCard[] = [
   { icon: Package, title: 'Vehicle Shipping', desc: 'For cars, SUVs, motorcycles, vans and other eligible vehicles, coordinated locally and internationally.', link: '/services/vehicle-shipping', img: '/images/vehicle-shipping.svg' },
   { icon: Heart, title: 'Pet & Live Animal Transport', desc: 'Helping families coordinate safe, comfortable journeys for their animals, whether across the country or internationally.', link: '/services/pet-live-animal', img: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=600&q=80' },
   { icon: Warehouse, title: 'Warehousing', desc: 'Secure storage facilities with inventory management order fulfillment and distribution services. Climate-controlled options available.', link: '/services#warehousing', img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80', anchor: 'warehousing' },
-  { icon: Globe, title: 'Customs Support', desc: 'Expert customs clearance and documentation services. We handle all import/export regulations to ensure smooth cross-border shipping.', link: '/services#customs-support', img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80', anchor: 'customs-support' },
+  // The Customs Support card was removed from this grid when the section was
+  // promoted to a top-level header nav item. The 'customs-support' anchored
+  // section below is still what that link points at, so no copy was lost.
 ];
 
 /** In-page sections rendered below the card grid, keyed by anchor id. */

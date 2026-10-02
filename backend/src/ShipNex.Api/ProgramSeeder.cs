@@ -56,7 +56,7 @@ public static partial class ProgramSeeder
         if (context.Offices.Any()) return;
 
         context.Offices.AddRange(
-            new Office { Name = "New York Global Hub", Code = "NYC", Address = "123 Logistics Ave", City = "New York", Country = "USA", Phone = "+1 800 SHIP-NEX", Email = "nyc@shipnexaro.com", OpeningHours = "24/7", Type = "Hub", Latitude = 40.7128, Longitude = -74.0060 },
+            new Office { Name = "New York Global Hub", Code = "NYC", Address = "123 Logistics Ave", City = "New York", Country = "USA", Phone = "+1 800 744-7639", Email = "nyc@shipnexaro.com", OpeningHours = "24/7", Type = "Hub", Latitude = 40.7128, Longitude = -74.0060 },
             new Office { Name = "Los Angeles Port Office", Code = "LAX", Address = "456 Harbor Blvd", City = "Los Angeles", Country = "USA", Phone = "+1 310 555 0100", Email = "lax@shipnexaro.com", OpeningHours = "06:00 - 22:00", Type = "Port", Latitude = 34.0522, Longitude = -118.2437 },
             new Office { Name = "London Heathrow Air Cargo", Code = "LHR", Address = "789 Cargo Way", City = "London", Country = "UK", Phone = "+44 20 7000 0000", Email = "lhr@shipnexaro.com", OpeningHours = "24/7", Type = "Airport", Latitude = 51.5074, Longitude = -0.1278 },
             new Office { Name = "Singapore Regional Hub", Code = "SIN", Address = "12 Maritime Square", City = "Singapore", Country = "Singapore", Phone = "+65 6000 0000", Email = "sin@shipnexaro.com", OpeningHours = "24/7", Type = "Hub", Latitude = 1.3521, Longitude = 103.8198 },

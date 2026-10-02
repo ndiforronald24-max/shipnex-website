@@ -29,7 +29,7 @@ public static class EmailTemplateEngine
     {
         return Templates.TryGetValue(name, out var template)
             ? template
-            : CreateShipmentTemplate("ShipNex Notification", "{{Message}}");
+            : CreateShipmentTemplate("ShipNexaro Notification", "{{Message}}");
     }
 
     private static EmailTemplate CreateShipmentTemplate(string subject, string statusMessage)
@@ -58,7 +58,7 @@ public static class EmailTemplateEngine
 <head>
     <meta charset=""UTF-8"">
     <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
-    <title>{subject} - ShipNex</title>
+    <title>{subject} - ShipNexaro</title>
 </head>
 <body style=""margin:0;padding:0;background-color:#f4f6f9;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif"">
     <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" width=""100%"" style=""background-color:#f4f6f9"">
@@ -67,7 +67,7 @@ public static class EmailTemplateEngine
                 <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" width=""600"" style=""max-width:600px;background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,0.07)"">
                     <tr>
                         <td style=""background:linear-gradient(135deg,#1a237e,#283593);padding:30px 40px;text-align:center"">
-                            <h1 style=""color:#ffffff;margin:0;font-size:28px;font-weight:700"">ShipNex</h1>
+                            <h1 style=""color:#ffffff;margin:0;font-size:28px;font-weight:700"">ShipNexaro</h1>
                             <p style=""color:#9fa8da;margin:5px 0 0;font-size:14px"">Logistics &amp; Transport Solutions</p>
                         </td>
                     </tr>
@@ -103,12 +103,12 @@ public static class EmailTemplateEngine
                     <tr>
                         <td style=""padding:20px 40px;background-color:#fafafa;border-top:1px solid #eceff1"">
                             <p style=""color:#78909c;font-size:13px;margin:0 0 8px"">Need help? Contact our support team:</p>
-                            <p style=""color:#546e7a;font-size:13px;margin:0"">Email: <a href=""mailto:support@shipnex.com"" style=""color:#1a237e"">support@shipnex.com</a> | Phone: +1 (800) SHIP-NEX</p>
+                            <p style=""color:#546e7a;font-size:13px;margin:0"">Email: <a href=""mailto:support@shipnexaro.com"" style=""color:#1a237e"">support@shipnexaro.com</a> | Phone: +1 (800) 744-7639</p>
                         </td>
                     </tr>
                     <tr>
                         <td style=""padding:20px 40px;background-color:#1a237e;text-align:center"">
-                            <p style=""color:#9fa8da;font-size:12px;margin:0 0 5px"">&copy; {{{{Year}}}} ShipNex Logistics. All rights reserved.</p>
+                            <p style=""color:#9fa8da;font-size:12px;margin:0 0 5px"">&copy; {{{{Year}}}} ShipNexaro Logistics. All rights reserved.</p>
                             <p style=""color:#7986cb;font-size:11px;margin:0"">123 Logistics Way, Global City, GC 10001</p>
                         </td>
                     </tr>
@@ -133,9 +133,9 @@ Estimated Delivery: {{{{EstimatedDelivery}}}}
 
 Track your shipment: {{{{TrackingUrl}}}}
 
-Need help? Contact support@shipnex.com or call +1 (800) SHIP-NEX
+Need help? Contact support@shipnexaro.com or call +1 (800) 744-7639
 
-&copy; {{{{Year}}}} ShipNex Logistics. All rights reserved.";
+&copy; {{{{Year}}}} ShipNexaro Logistics. All rights reserved.";
 
     private static string GetPetHtml(string subject, string statusMessage) =>
         $@"<!DOCTYPE html>
@@ -143,7 +143,7 @@ Need help? Contact support@shipnex.com or call +1 (800) SHIP-NEX
 <head>
     <meta charset=""UTF-8"">
     <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
-    <title>{subject} - ShipNex Pet Transport</title>
+    <title>{subject} - ShipNexaro Pet Transport</title>
 </head>
 <body style=""margin:0;padding:0;background-color:#fdf6f0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif"">
     <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" width=""100%"" style=""background-color:#fdf6f0"">
@@ -152,7 +152,7 @@ Need help? Contact support@shipnex.com or call +1 (800) SHIP-NEX
                 <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" width=""600"" style=""max-width:600px;background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,0.07)"">
                     <tr>
                         <td style=""background:linear-gradient(135deg,#4a148c,#6a1b9a);padding:30px 40px;text-align:center"">
-                            <h1 style=""color:#ffffff;margin:0;font-size:28px;font-weight:700"">🐾 ShipNex Pet Transport</h1>
+                            <h1 style=""color:#ffffff;margin:0;font-size:28px;font-weight:700"">🐾 ShipNexaro Pet Transport</h1>
                             <p style=""color:#ce93d8;margin:5px 0 0;font-size:14px"">Safe &amp; Compassionate Pet Relocation</p>
                         </td>
                     </tr>
@@ -194,7 +194,7 @@ Need help? Contact support@shipnex.com or call +1 (800) SHIP-NEX
                     </tr>
                     <tr>
                         <td style=""padding:20px 40px;background-color:#4a148c;text-align:center"">
-                            <p style=""color:#ce93d8;font-size:12px;margin:0 0 5px"">&copy; {{{{Year}}}} ShipNex Pet Transport. All rights reserved.</p>
+                            <p style=""color:#ce93d8;font-size:12px;margin:0 0 5px"">&copy; {{{{Year}}}} ShipNexaro Pet Transport. All rights reserved.</p>
                             <p style=""color:#ba68c8;font-size:11px;margin:0"">Caring for your pets like our own.</p>
                         </td>
                     </tr>
@@ -222,7 +222,7 @@ Track your pet: {{{{TrackingUrl}}}}
 
 Questions? Contact pets@shipnex.com or call +1 (800) PET-SHIP
 
-&copy; {{{{Year}}}} ShipNex Pet Transport. All rights reserved.";
+&copy; {{{{Year}}}} ShipNexaro Pet Transport. All rights reserved.";
 }
 
 /// <summary>

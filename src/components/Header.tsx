@@ -17,6 +17,10 @@ export default function Header() {
     { path: '/track', label: 'Track' },
     { path: '/track/pet', label: 'Pet Transport' },
     { path: '/offices', label: 'Offices' },
+    // Promoted out of the Services dropdown to a top-level nav item. Links to
+    // the anchored section rather than its own route, so the copy that used to
+    // sit under the Customs Support card is still reachable.
+    { path: '/services#customs-support', label: 'Customs Support' },
     { path: '/contact', label: 'Contact' },
   ];
 
@@ -28,7 +32,6 @@ export default function Header() {
     { path: '/services/vehicle-shipping', label: 'Vehicle Shipping' },
     { path: '/services/pet-live-animal', label: 'Pet & Live Animal' },
     { path: '/services#warehousing', label: 'Warehousing' },
-    { path: '/services#customs-support', label: 'Customs Support' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -69,7 +72,7 @@ export default function Header() {
           <span>Global Shipping & Logistics Solutions</span>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
-              <Phone className="w-3 h-3" /> +1 (800) SHIP-NEX
+              <Phone className="w-3 h-3" /> +1 (800) 744-7639
             </span>
             <span>support@shipnexaro.com</span>
           </div>

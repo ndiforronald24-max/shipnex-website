@@ -55,7 +55,7 @@ export default function ContactPage() {
                 <Phone className="w-7 h-7 text-[#ff6f00]" />
               </div>
               <h3 className="font-semibold text-lg mb-2">Phone</h3>
-              <p className="text-sm text-gray-500">+1 (800) SHIP-NEX</p>
+              <p className="text-sm text-gray-500">+1 (800) 744-7639</p>
             </div>
             <div className="text-center p-8 bg-white rounded-2xl shadow-md card-lift border border-gray-100">
               <div className="w-14 h-14 bg-orange-50 rounded-xl flex items-center justify-center mx-auto mb-4">
